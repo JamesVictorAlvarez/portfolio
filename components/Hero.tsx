@@ -3,13 +3,13 @@ import { Github, Mail, Linkedin } from 'lucide-react';
 
 const hero = () => {
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black-100 flex flex-col justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         {/* Main content */}
         <div className="space-y-6 text-center sm:text-left">
           <h1 className="text-4xl sm:text-6xl font-bold text-white tracking-tight">
             <span className="block">Hi, I'm</span>
-            <span className="block text-blue-400">James Victor Alvarez</span>
+            <span className="block text-black-500">James Victor Alvarez</span>
           </h1>
           
           <p className="text-xl sm:text-2xl text-gray-300">
@@ -36,7 +36,7 @@ const hero = () => {
 
           {/* CTA Button */}
           <div className="mt-8">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <button className="bg-black-500 hover:bg-black-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
               View My Work
             </button>
           </div>
