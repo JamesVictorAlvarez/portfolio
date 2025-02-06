@@ -8,7 +8,7 @@ const hero = () => {
         {/* Main content */}
         <div className="space-y-6 text-center sm:text-left">
           <h1 className="text-4xl sm:text-6xl font-bold text-white tracking-tight">
-            <span className="block">Hi, I'm</span>
+            <span className="block">Hi, I&apos;m</span>
             <span className="block text-black-500">James Victor Alvarez</span>
           </h1>
           
