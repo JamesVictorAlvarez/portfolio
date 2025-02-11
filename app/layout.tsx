@@ -13,6 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/favicon.ico",
+  },
   title: "James Victor Alvarez",
   description: "A typical Computer Science student portfolio. ConU27",
 };
