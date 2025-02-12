@@ -1,5 +1,6 @@
 import React from 'react';
 import { HoverEffect } from './ui/card-hover-effect';
+import Image from 'next/image';
 
 const AboutMe = () => {
   return (
@@ -8,7 +9,8 @@ const AboutMe = () => {
         <div className="max-w-3xl mx-auto">
             <div className="text-center">
             <div className="relative w-36 h-36 mx-auto mb-8">
-                <img
+                <Image
+                fill
                 src="/Me.jpg"
                 alt="Profile"
                 className="rounded-full"
@@ -23,8 +25,8 @@ const AboutMe = () => {
                 <p className="text-gray-400 text-lg leading-relaxed mb-4">
                 I started coding in 2020 after high school when I was trying to find what I wanted to do in life.
                 After falling in love with programming, I decided to pursue it as a career. My enthusiasm lies in 
-                learning cutting-edge technologies that push the boundaries of what's possible on the internet
-                Whether it's through coding, design, or experimentation, I'm always excited to explore new ways to 
+                learning cutting-edge technologies that push the boundaries of what&apos;s possible on the internet
+                Whether it&apos;s through coding, design, or experimentation, I&apos;m always excited to explore new ways to 
                 bring ideas to life.
                 </p>
             </div>
