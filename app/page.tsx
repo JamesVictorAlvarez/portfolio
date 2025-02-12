@@ -1,7 +1,8 @@
 import Hero from "@/components/Hero";
 import { FloatingNav } from "@/components/ui/FloatingNav";
-import { FaHome } from "react-icons/fa";
+import { House, CircleUserRound } from 'lucide-react';
 import Head from "next/head";
+import AboutMe from "@/components/AboutMe";
 
 
 export default function Home() {
@@ -13,9 +14,11 @@ export default function Home() {
     <main className="bg-black-100">
       <div className="">
         <FloatingNav navItems={[
-          {name: "Home", link: "/", icon:<FaHome />},
+          {name: "Home", link: "#home", icon:<House />},
+          {name: "About", link: "#about", icon:<CircleUserRound />},
         ]}/>
         <Hero />
+        <AboutMe /> 
       </div>
     </main>
     </>
