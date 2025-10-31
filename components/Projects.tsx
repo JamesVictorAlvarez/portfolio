@@ -143,7 +143,7 @@ export default function Projects() {
         </div>
       </div>
       <div className="text-center mt-12">
-        <a href="/projects" className="btn">
+        <a href="#" className="btn">
           View All Projects
         </a>
       </div>
