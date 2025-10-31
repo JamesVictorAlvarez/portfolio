@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 export default function Nav() {
   const links = [
     { name: "about", href: "#home" },
+    { name: "skills", href: "#skills" },
     { name: "projects", href: "#projects" },
     { name: "experience", href: "#experience" },
     { name: "contact", href: "#contact" },

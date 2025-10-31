@@ -10,9 +10,17 @@ export default function Experience() {
       ],
     },
     {
-      role: "Lorem Ipsum)",
+      role: "Lorem Ipsum",
       org: "Concordia University",
       period: "Jan – Apr 2025",
+      points: [
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper sagittis tincidunt. Donec vitae ornare sapien. Aenean sed quam vel sapien gravida aliquam non vitae sapien. ",
+      ],
+    },
+    {
+      role: "Lorem Ipsum",
+      org: "Vanier College",
+      period: "Mar – May 2027",
       points: [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper sagittis tincidunt. Donec vitae ornare sapien. Aenean sed quam vel sapien gravida aliquam non vitae sapien. ",
       ],
