@@ -23,7 +23,6 @@ body {
   color: var(--text-main);
 }
 
-/* Layout */
 .section {
   @apply mx-auto px-6 py-16;
 }
@@ -31,12 +30,10 @@ body {
 .container-narrow { max-width: 46rem; }
 .container-wide   { max-width: 64rem; }
 
-/* Headings & text */
 .h2 { @apply text-3xl font-semibold tracking-tight; color: var(--text-main); }
 .h3 { @apply text-xl font-semibold; color: var(--text-main); }
 .muted { color: var(--text-muted); }
 
-/* Cards, panels, nav backgrounds */
 .card {
   background-color: var(--bg-alt);
   border: 1px solid var(--border);
@@ -45,7 +42,6 @@ body {
 
 .divider { border-color: var(--border); }
 
-/* Links */
 a {
   color: var(--accent);
   text-decoration: underline;
@@ -58,7 +54,6 @@ a:hover {
   text-decoration-color: var(--accent-warn);
 }
 
-/* Buttons (e.g. contact) */
 .btn {
   background-color: var(--accent);
   color: var(--bg-main);
@@ -70,7 +65,6 @@ a:hover {
   color: var(--bg-main);
 }
 
-/* Optional hover state for cards */
 .card:hover {
   border-color: var(--accent);
   background-color: var(--bg-alt);
