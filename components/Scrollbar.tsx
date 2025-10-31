@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const sections = ["home", "skills", "projects", "experience", "contact"];
+const sections = ["home", "skills", "projects", "experience", "music"];
 
 export default function Scrollbar() {
   const [active, setActive] = useState("home");

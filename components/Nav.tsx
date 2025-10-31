@@ -7,7 +7,7 @@ export default function Nav() {
     { name: "skills", href: "#skills" },
     { name: "projects", href: "#projects" },
     { name: "experience", href: "#experience" },
-    { name: "contact", href: "#contact" },
+    { name: "music", href: "#music" },
   ];
 
   const [visible, setVisible] = useState(true);

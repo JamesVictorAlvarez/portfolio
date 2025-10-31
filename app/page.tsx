@@ -3,8 +3,9 @@ import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
-import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import Music from "@/components/Music";
+
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
       <Skills />
       <Projects />
       <Experience />
-      <Contact />
+      <Music />
       <Footer />
     </main>
   );
