@@ -3,23 +3,36 @@ import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center px-4">
+    <section id="home" className="section container-narrow pt-12">
       <motion.h1
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl md:text-6xl font-bold mb-4"
+        transition={{ duration: .5 }}
+        className="text-4xl md:text-5xl font-bold tracking-tight"
       >
-        Hi, I’m <span className="text-blue-600">James Victor Alvarez</span>
+        Hi, I’m James Victor Alvarez.
       </motion.h1>
+
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="text-lg text-neutral-600 max-w-2xl"
+        transition={{ delay: .1, duration: .6 }}
+        className="muted mt-4"
       >
-        Computer Science student at Concordia University with a passion for building efficient, elegant software.
+        Computer Science student at Concordia. I like building clean, dependable software—
+        mostly React/TypeScript on the front, and Java/C on the systems side.
       </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: .2, duration: .5 }}
+        className="mt-6 flex flex-wrap gap-4"
+      >
+        <a href="https://github.com/JamesVictorAlvarez">GitHub</a>
+        <a href="https://www.linkedin.com/in/jv-alvarez/">LinkedIn</a>
+        <a href="mailto:jamesvictoralvarez@gmail.com">Email</a>
+      </motion.div>
     </section>
   );
 }

@@ -2,16 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-    scroll-behavior: smooth;
-  }
+html, body { scroll-behavior: smooth; }
+body { @apply bg-white text-neutral-900 antialiased; }
 
-  body {
-    @apply bg-white text-neutral-900 antialised;
-  }
+/* Unified section spacing */
+.section { @apply mx-auto px-6 py-16; }
 
-@layer base {
-  :root {
-        --radius: 0.75rem;
-    }
-}
+/* Content widths inspired by rvdeguzman.com */
+.container-narrow { max-width: 46rem; }  /* ~736px for text-heavy sections */
+.container-wide   { max-width: 64rem; }  /* ~1024px for grids/lists */
+
+/* Simple links */
+a { @apply underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-600; }
+
+/* Soft cards & lists */
+.card { @apply border border-neutral-200 rounded-2xl bg-white; }
+.divider { @apply border-t border-neutral-200; }
+
+/* Headings rhythm */
+.h2 { @apply text-3xl font-semibold tracking-tight; }
+.h3 { @apply text-xl font-semibold; }
+
+/* Muted copy */
+.muted { @apply text-neutral-600; }

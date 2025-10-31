@@ -1,30 +1,16 @@
-"use client";
-import { motion } from "framer-motion";
-
 export default function Contact() {
   return (
-    <section id="contact" className="max-w-2xl mx-auto px-6 py-20 text-center">
-      <motion.h2
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl font-bold mb-6"
-      >
-        Get in Touch
-      </motion.h2>
-      <p className="text-neutral-600 mb-6">
-        Want to collaborate or chat? Reach out at{" "}
-        <a href="mailto:jamesvictoralvarez@gmail.com" className="text-blue-600 underline">
-          jamesvictoralvarez@gmail.com
-        </a>
+    <section id="contact" className="section container-narrow">
+      <h2 className="h2 mb-4">Get in touch</h2>
+      <p className="muted mb-6">
+        Want to collaborate or chat? I’m always happy to connect.
       </p>
-      <motion.a
-        whileHover={{ scale: 1.05 }}
+      <a
         href="mailto:jamesvictoralvarez@gmail.com"
-        className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium"
+        className="inline-block px-5 py-2 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800 no-underline"
       >
         Say Hello
-      </motion.a>
+      </a>
     </section>
   );
 }
