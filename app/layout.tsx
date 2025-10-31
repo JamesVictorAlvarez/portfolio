@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// load the font
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // adjust weights you need
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "James Victor Alvarez",
@@ -10,10 +15,16 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={`${inter.className} page-fade`}>
+      <body
+        className={`${barlowCondensed.className} bg-[var(--bg-main)] text-[var(--text-main)]`}
+      >
         {children}
       </body>
     </html>

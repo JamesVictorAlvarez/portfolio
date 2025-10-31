@@ -2,26 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { scroll-behavior: smooth; }
-body { @apply bg-white text-neutral-900 antialiased; }
+html, body {
+  scroll-behavior: smooth;
+}
 
-/* Unified section spacing */
-.section { @apply mx-auto px-6 py-16; }
+:root {
+  --bg-main: #141415;
+  --bg-alt: #1c1c24;
+  --border: #252530;
+  --text-main: #cdcdcd;
+  --text-muted: #606079;
+  --accent: #7e98e8;
+  --accent-warn: #f3be7c;
+  --accent-error: #d8647e;
+}
 
-/* Content widths inspired by rvdeguzman.com */
-.container-narrow { max-width: 46rem; }  /* ~736px for text-heavy sections */
-.container-wide   { max-width: 64rem; }  /* ~1024px for grids/lists */
+body {
+  @apply antialiased;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
 
-/* Simple links */
-a { @apply underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-600; }
+/* Layout */
+.section {
+  @apply mx-auto px-6 py-16;
+}
 
-/* Soft cards & lists */
-.card { @apply border border-neutral-200 rounded-2xl bg-white; }
-.divider { @apply border-t border-neutral-200; }
+.container-narrow { max-width: 46rem; }
+.container-wide   { max-width: 64rem; }
 
-/* Headings rhythm */
-.h2 { @apply text-3xl font-semibold tracking-tight; }
-.h3 { @apply text-xl font-semibold; }
+/* Headings & text */
+.h2 { @apply text-3xl font-semibold tracking-tight; color: var(--text-main); }
+.h3 { @apply text-xl font-semibold; color: var(--text-main); }
+.muted { color: var(--text-muted); }
 
-/* Muted copy */
-.muted { @apply text-neutral-600; }
+/* Cards, panels, nav backgrounds */
+.card {
+  background-color: var(--bg-alt);
+  border: 1px solid var(--border);
+  @apply rounded-2xl transition;
+}
+
+.divider { border-color: var(--border); }
+
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--border);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+a:hover {
+  color: var(--accent-warn);
+  text-decoration-color: var(--accent-warn);
+}
+
+/* Buttons (e.g. contact) */
+.btn {
+  background-color: var(--accent);
+  color: var(--bg-main);
+  @apply font-medium px-5 py-2 rounded-lg no-underline;
+  transition: background-color .2s ease, color .2s ease;
+}
+.btn:hover {
+  background-color: var(--accent-warn);
+  color: var(--bg-main);
+}
+
+/* Optional hover state for cards */
+.card:hover {
+  border-color: var(--accent);
+  background-color: var(--bg-alt);
+}

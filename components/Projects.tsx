@@ -27,9 +27,9 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="section container-wide">
+    <section id="projects" className="section container-narrow">
       <h2 className="h2 mb-8">Projects</h2>
-      <div className="divide-y divide-neutral-200">
+      <div className="divide-y divide-neutral-200 card p-6">
         {projects.map((p, i) => (
           <motion.article
             key={i}
