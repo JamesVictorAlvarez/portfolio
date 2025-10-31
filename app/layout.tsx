@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed } from "next/font/google";
+import Scrollbar from "@/components/Scrollbar";
 import "./globals.css";
 
 const barlowCondensed = Barlow_Condensed({
@@ -25,6 +26,7 @@ export default function RootLayout({
         className={`${barlowCondensed.className} bg-[var(--bg-main)] text-[var(--text-main)]`}
       >
         {children}
+        <Scrollbar /> {/* <-- add this here */}
       </body>
     </html>
   );
