@@ -8,11 +8,20 @@ html, body {
 
 :root {
   --bg-main: #141415;
-  --bg-alt: #1c1c24;
-  --border: #252530;
   --text-main: #cdcdcd;
-  --text-muted: #606079;
+  --bg-alt: #1c1c24;
   --accent: #7e98e8;
+  --border: #333738;
+  --accent-warn: #f3be7c;
+  --accent-error: #d8647e;
+}
+
+html.light {
+  --bg-main: #efe9de;      
+  --text-main: #2b2b2b;
+  --bg-alt: #e3ddd2;        
+  --accent: #7e98e8;
+  --border: #d3cbbd;
   --accent-warn: #f3be7c;
   --accent-error: #d8647e;
 }
@@ -112,7 +121,7 @@ body, a, button {
   background-size: 5px 5px;
   animation: ditherMove 12s linear infinite;
   mix-blend-mode: lighten;
-  opacity: 0.6; /* temporarily high to confirm it works */
+  opacity: 0.6; 
 }
 
 @keyframes ditherMove {
@@ -122,4 +131,20 @@ body, a, button {
   to {
     background-position: 200px 200px, 202px 202px;
   }
+}
+
+html, body {
+  transition: background-color 0.6s ease, color 0.6 ease;
+}
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+html.light .bg-dither {
+  background-image:
+    linear-gradient(125deg, rgba(5,5,5,0.07) 0%, rgba(0,0,0,0.02) 100%),
+    linear-gradient(45deg, rgba(5,5,5,0.09) 0%, rgba(255,255,255,0.01) 100%);
+  mix-blend-mode: multiply;
+  opacity: 0.25;
 }

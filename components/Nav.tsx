@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useScrollSpy } from "@/components/hooks/useScrollSpy";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const LINKS = [
   { name: "about", href: "#home", id: "home" },
@@ -13,12 +14,8 @@ const LINKS = [
 export default function Nav() {
   const active = useScrollSpy({
     ids: LINKS.map((l) => l.id),
-    // you can tweak if needed:
-    // thresholds: [0.15, 0.3, 0.45, 0.6],
-    // rootMargin: "-15% 0px -45% 0px",
   });
 
-  // (optional) hide-on-scroll you already had; keep if you want:
   const [visible, setVisible] = useState(true);
   const [lastY, setLastY] = useState(0);
   useEffect(() => {
@@ -60,6 +57,7 @@ export default function Nav() {
           {l.name}
         </a>
       ))}
+      <ThemeToggle />
     </nav>
   );
 }
