@@ -1,36 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useScrollSpy } from "@/components/hooks/useScrollSpy";
 
-const sections = ["home", "skills", "projects", "experience", "music"];
+const SECTIONS = ["home", "skills", "projects", "experience", "music"];
 
-export default function Scrollbar() {
-  const [active, setActive] = useState("home");
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
-        });
-      },
-      {
-        threshold: 0.6,
-      }
-    );
-
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+export default function ScrollTracker() {
+  const active = useScrollSpy({ ids: SECTIONS });
 
   return (
     <div className="fixed right-5 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-40">
-      {sections.map((id) => (
+      {SECTIONS.map((id) => (
         <a
           key={id}
           href={`#${id}`}

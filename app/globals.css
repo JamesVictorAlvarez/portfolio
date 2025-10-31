@@ -94,3 +94,7 @@ a:hover {
   scrollbar-width: thin;
   scrollbar-color: var(--border) var(--bg-main);
 }
+
+section[id] {
+  scroll-margin-top: 7rem;
+}

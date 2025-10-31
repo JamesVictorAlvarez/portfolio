@@ -1,56 +1,40 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useScrollSpy } from "@/components/hooks/useScrollSpy";
+
+const LINKS = [
+  { name: "about", href: "#home", id: "home" },
+  { name: "skills", href: "#skills", id: "skills" },
+  { name: "projects", href: "#projects", id: "projects" },
+  { name: "experience", href: "#experience", id: "experience" },
+  { name: "music", href: "#music", id: "music" },
+];
 
 export default function Nav() {
-  const links = [
-    { name: "about", href: "#home" },
-    { name: "skills", href: "#skills" },
-    { name: "projects", href: "#projects" },
-    { name: "experience", href: "#experience" },
-    { name: "music", href: "#music" },
-  ];
+  const active = useScrollSpy({
+    ids: LINKS.map((l) => l.id),
+    // you can tweak if needed:
+    // thresholds: [0.15, 0.3, 0.45, 0.6],
+    // rootMargin: "-15% 0px -45% 0px",
+  });
 
+  // (optional) hide-on-scroll you already had; keep if you want:
   const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [active, setActive] = useState("home");
-
+  const [lastY, setLastY] = useState(0);
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-    const handleScroll = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY && currentScrollY > 80) {
-          setVisible(false);
-        } else {
-          setVisible(true);
-        }
-        setLastScrollY(currentScrollY);
+    let t: ReturnType<typeof setTimeout>;
+    const onScroll = () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const y = window.scrollY;
+        if (y > lastY && y > 80) setVisible(false);
+        else setVisible(true);
+        setLastY(y);
       }, 50);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
-  useEffect(() => {
-    const sections = document.querySelectorAll("section[id]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute("id");
-            if (id) setActive(id);
-          }
-        });
-      },
-      {
-        threshold: 0.6, 
-      }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => sections.forEach((section) => observer.unobserve(section));
-  }, []);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [lastY]);
 
   return (
     <nav
@@ -63,18 +47,15 @@ export default function Nav() {
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}
       `}
     >
-      {links.map((l) => (
+      {LINKS.map((l) => (
         <a
-          key={l.name}
+          key={l.id}
           href={l.href}
-          className={`
-            text-sm underline-offset-4 transition
-            ${
-              active === l.href.substring(1)
-                ? "text-[var(--accent)] font-semibold"
-                : "text-[var(--text-main)] hover:text-[var(--accent)]"
-            }
-          `}
+          className={`text-sm underline-offset-4 transition ${
+            active === l.id
+              ? "text-[var(--accent)] font-semibold"
+              : "text-[var(--text-main)] hover:text-[var(--accent)]"
+          }`}
         >
           {l.name}
         </a>
