@@ -98,3 +98,28 @@ a:hover {
 section[id] {
   scroll-margin-top: 7rem;
 }
+
+body, a, button {
+  cursor: none !important;
+}
+
+.bg-dither {
+  background-color: var(--bg-main);
+  background-image:
+    radial-gradient(rgba(255,255,255,0.06) 1px, transparent 0), 
+    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 0);
+  background-position: 0 0, 2px 2px;
+  background-size: 5px 5px;
+  animation: ditherMove 12s linear infinite;
+  mix-blend-mode: lighten;
+  opacity: 0.6; /* temporarily high to confirm it works */
+}
+
+@keyframes ditherMove {
+  from {
+    background-position: 0 0, 2px 2px;
+  }
+  to {
+    background-position: 200px 200px, 202px 202px;
+  }
+}

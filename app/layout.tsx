@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed } from "next/font/google";
 import Scrollbar from "@/components/Scrollbar";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const barlowCondensed = Barlow_Condensed({
@@ -23,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${barlowCondensed.className} bg-[var(--bg-main)] text-[var(--text-main)]`}
+        className={`${barlowCondensed.className} relative bg-[var(--bg-main)] text-[var(--text-main)] overflow-x-hidden`}
       >
+        <div className="fixed inset-0 -z-10 pointer-events-none bg-dither" />
         {children}
-        <Scrollbar /> {/* <-- add this here */}
+        <Scrollbar />
+        <CustomCursor />
       </body>
     </html>
   );
