@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import { Rocket } from "lucide-react";
 
 const projects = [
   {
@@ -70,7 +71,17 @@ export default function Projects() {
 
   return (
     <section id="projects" className="section container-narrow">
-      <h2 className="h2 mb-10 text-[var(--accent)]">Projects</h2>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="flex items-center gap-2 mb-8"
+      >
+        <Rocket className="text-[var(--accent)]" size={22} />
+        <h2 className="h2">Projects</h2>
+      </motion.div>
+
       <div className="relative">
         <button
           onClick={prev}

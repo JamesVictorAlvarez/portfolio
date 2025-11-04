@@ -1,3 +1,7 @@
+"use client";
+import { motion } from "framer-motion";
+import { Briefcase } from "lucide-react";
+
 export default function Experience() {
   const items = [
     {
@@ -14,8 +18,8 @@ export default function Experience() {
       org: "Université de Montréal",
       period: "May 2025",
       points: [
-        "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences",
-        "Built in Unity using C#, with each level presenting unique challenges",
+        "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences.",
+        "Built in Unity using C#, with each level presenting unique challenges.",
       ],
     },
     {
@@ -23,18 +27,18 @@ export default function Experience() {
       org: "Concordia University",
       period: "Feb 2025",
       points: [
-        "Helped implement a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics",
-        "Developed a multiplayer architecture supporting both TCP and UDP sockets",
+        "Implemented a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics.",
+        "Developed a multiplayer architecture supporting both TCP and UDP sockets.",
       ],
     },
     {
       role: "JACHacks",
-      org: "John Abott College",
+      org: "John Abbott College",
       period: "May 2024",
       points: [
-        "Winner of Valnet Mini Challenge",
-        "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP/AI models to identify content overlaps",
-        "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites",
+        "Winner of Valnet Mini Challenge.",
+        "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP/AI models.",
+        "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites.",
       ],
     },
     {
@@ -42,26 +46,56 @@ export default function Experience() {
       org: "Vanier College",
       period: "Jan 2024",
       points: [
-        "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects",
+        "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
+        "Implemented custom C# scripts for camera control, state management",
       ],
     },
   ];
 
   return (
     <section id="experience" className="section container-narrow">
-      <h2 className="h2 mb-8">Experience</h2>
-      <div className="space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="flex items-center gap-2 mb-8"
+      >
+        <Briefcase className="text-[var(--accent)]" size={22} />
+        <h2 className="h2">Experience</h2>
+      </motion.div>
+      
+      <div className="flex flex-col space-y-10">
         {items.map((e, i) => (
-          <div key={i}>
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            viewport={{ once: true }}
+            className="relative group border-l border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors"
+          >
+            <span className="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors" />
+
             <div className="flex flex-wrap items-baseline gap-2">
-              <h3 className="h3">{e.role}</h3>
-              <span className="muted">• {e.org}</span>
-              <span className="muted ml-auto text-sm">{e.period}</span>
+              <h3 className="text-lg font-semibold text-[var(--text-main)]">
+                {e.role}
+              </h3>
+              <span className="text-[var(--accent)] text-sm">@ {e.org}</span>
+              <span className="muted ml-auto text-xs font-medium">
+                {e.period}
+              </span>
             </div>
-            <ul className="list-disc pl-6 muted mt-2 space-y-1">
-              {e.points.map((pt, j) => <li key={j}>{pt}</li>)}
+
+            <ul className="mt-3 space-y-1.5 text-sm text-[var(--text-main)]/80 leading-relaxed">
+              {e.points.map((pt, j) => (
+                <li key={j} className="flex items-start gap-2">
+                  <span className="text-[var(--accent)] text-xs mt-0.5">•</span>
+                  <span>{pt}</span>
+                </li>
+              ))}
             </ul>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

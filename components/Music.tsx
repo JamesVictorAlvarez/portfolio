@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { Music2 } from "lucide-react";
 
 const songs = [
   {
@@ -32,15 +33,16 @@ const songs = [
 export default function Music() {
   return (
     <section id="music" className="section container-narrow flex flex-col">
-      <motion.h2
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         viewport={{ once: true }}
-        className="h2 text-[var(--accent)]"
+        className="flex items-center gap-2 mb-8"
       >
-        My Music lately
-      </motion.h2>
+        <Music2 className="text-[var(--accent)]" size={22} />
+        <h2 className="h2">My Favourite Music</h2>
+      </motion.div>
 
       <motion.p
         initial={{ opacity: 0 }}

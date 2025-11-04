@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { SiReact, SiTypescript, SiTailwindcss, SiJavascript, SiNextdotjs, SiDocker, SiNodedotjs, SiMysql, SiPhp, SiC, SiGit, SiLinux } from "react-icons/si";
 import { FaJava } from "react-icons/fa6";
+import { Wrench } from "lucide-react";
 
 const skillCategories = [
   {
@@ -42,7 +43,16 @@ const skillCategories = [
 export default function Skills() {
   return (
     <section id="skills" className="section container-narrow">
-      <h2 className="h2 mb-10">Skills</h2>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="flex items-center gap-2 mb-8"
+      >
+        <Wrench className="text-[var(--accent)]" size={22} />
+        <h2 className="h2">Skills</h2>
+      </motion.div>
 
       <div className="grid md:grid-cols-2 gap-10">
         {skillCategories.map((category, i) => (
