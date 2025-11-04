@@ -38,7 +38,7 @@ export default function Hero() {
       >
         <div className="relative w-64 h-64 md:w-80 md:h-80 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
           <Image
-            src="/me.jpg"
+            src="/Me.jpg"
             alt="James Victor Alvarez"
             fill
             className="object-cover"

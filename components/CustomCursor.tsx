@@ -5,11 +5,9 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
 
-  // Track mouse position
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // 💨 Make the spring faster & tighter (less delay)
   const springX = useSpring(mouseX, { stiffness: 420, damping: 25, mass: 0.2 });
   const springY = useSpring(mouseY, { stiffness: 420, damping: 25, mass: 0.2 });
 
