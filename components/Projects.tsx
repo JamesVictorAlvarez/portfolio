@@ -6,34 +6,25 @@ import { Rocket } from "lucide-react";
 
 const projects = [
   {
-    title: "Energy API Dashboard",
+    title: "Music Guesser",
     description:
-      "A renewable energy platform for budgeting, CO₂ tracking, and real-time analytics.",
-    tech: ["React", "TypeScript", "Node.js", "PostgreSQL"],
+      "Web app where you guess songs or artists from 10-second audio clips.",
+    tech: ["React", "Socket.io", "Express", "Vite"],
+    demo: "https://music-guesser-eight.vercel.app/",
+    code: "https://github.com/JamesVictorAlvarez/MusicGuesser",
   },
   {
-    title: "Smart Home IoT",
+    title: "Munch",
     description:
-      "Realtime MQTT dashboard to monitor and control smart devices.",
-    tech: ["React", "Vite", "WebSockets", "MQTT"],
-  },
-  {
-    title: "Films API",
-    description:
-      "REST backend for managing films, actors, and categories.",
-    tech: ["PHP", "Slim", "MySQL", "Docker"],
+      "A flutter base restaurant order management system.",
+    tech: ["Flutter", "Firebase"],
+    code: "https://github.com/JamesVictorAlvarez/Flutter-Munch",
   },
   {
     title: "Lorem Ipsum",
     description:
       "Gamified sustainability tracker with CO₂ analytics.",
     tech: ["Next.js", "Supabase", "TailwindCSS"],
-  },
-  {
-    title: "Lorem Ipsum",
-    description:
-      "Minimal floating-UI portfolio built with Next.js & Framer Motion.",
-    tech: ["Next.js", "Framer Motion", "TailwindCSS"],
   },
 ];
 
@@ -45,7 +36,7 @@ export default function Projects() {
   const totalGroups = Math.ceil(projects.length / groupSize);
 
   useEffect(() => {
-    const timer = setInterval(() => next(), 6000);
+    const timer = setInterval(() => next(), 20000);
     return () => clearInterval(timer);
   });
 
@@ -135,18 +126,26 @@ export default function Projects() {
                 </div>
 
                 <div className="flex gap-4 mt-4 text-sm">
-                  <a
-                    href="#"
-                    className="flex items-center gap-1 text-[var(--accent)] hover:text-[var(--accent-warn)]"
-                  >
-                    <ExternalLink size={14} /> Demo
-                  </a>
-                  <a
-                    href="#"
-                    className="flex items-center gap-1 text-[var(--accent)] hover:text-[var(--accent-warn)]"
-                  >
-                    <Github size={14} /> Code
-                  </a>
+                  {project.demo && (
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-[var(--accent)] hover:text-[var(--accent-warn)]"
+                    >
+                      <ExternalLink size={14}/> Demo
+                    </a>
+                  )}
+                  {project.code && (
+                    <a
+                      href={project.code}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-[var(--accent)] hover:text-[var(--accent-warn)]"
+                    >
+                      <Github size={14}/> Code
+                    </a>
+                  )}
                 </div>
               </div>
             </motion.div>
