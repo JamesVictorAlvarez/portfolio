@@ -14,11 +14,11 @@ const projects = [
     code: "https://github.com/JamesVictorAlvarez/MusicGuesser",
   },
   {
-    title: "Munch",
+    title: "OrderUp",
     description:
-      "A flutter base restaurant order management system.",
+      "A flutter restaurant app order management system.",
     tech: ["Flutter", "Firebase"],
-    code: "https://github.com/JamesVictorAlvarez/Flutter-Munch",
+    code: "https://github.com/JamesVictorAlvarez/OrderUp",
   },
   {
     title: "Lorem Ipsum",
@@ -29,7 +29,7 @@ const projects = [
 ];
 
 export default function Projects() {
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);                                             
   const [index, setIndex] = useState(0);
 
   const groupSize = 3;
