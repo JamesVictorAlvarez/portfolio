@@ -14,17 +14,18 @@ const projects = [
     code: "https://github.com/JamesVictorAlvarez/MusicGuesser",
   },
   {
+    title: "Zonk",
+    description:
+      "A wave-based 3D shooter game built with SDL3 and C++, featuring a raycasting engine, procedural audio effects, and dynamic obstacle-based gameplay",
+    tech: ["C++", "SDL3"],
+    code: "https://github.com/JamesVictorAlvarez/Zonk",
+  },
+    {
     title: "OrderUp",
     description:
       "A flutter restaurant app order management system.",
     tech: ["Flutter", "Firebase"],
     code: "https://github.com/JamesVictorAlvarez/OrderUp",
-  },
-  {
-    title: "Lorem Ipsum",
-    description:
-      "Gamified sustainability tracker with CO₂ analytics.",
-    tech: ["Next.js", "Supabase", "TailwindCSS"],
   },
 ];
 
