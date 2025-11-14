@@ -18,6 +18,7 @@ const projects = [
     description:
       "A wave-based 3D shooter game built with SDL3 and C++, featuring a raycasting engine, procedural audio effects, and dynamic obstacle-based gameplay",
     tech: ["C++", "SDL3"],
+    demo: "https://zonk-shooter.netlify.app/",
     code: "https://github.com/JamesVictorAlvarez/Zonk",
   },
     {
