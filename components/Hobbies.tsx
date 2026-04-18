@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { getRecentMovies, type Movie } from "@/app/actions/letterboxd";
 import { Play, Film } from "lucide-react";
 
@@ -113,47 +113,55 @@ export default function Hobbies() {
       </motion.button>
 
       {/* Expanded Content Area */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="flex flex-col gap-12 pt-10">
-              
-              {/* Music Section */}
-              <div>
-                <div className="flex items-center gap-2 mb-6 text-[var(--text-main)]">
-                  <Play size={16} />
-                  <h3 className="text-base font-semibold uppercase tracking-widest text-[var(--text-muted)]">Music</h3>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
-                  {songs.map((song, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] }}
-                      className="rounded-xl overflow-hidden border border-[var(--border)] hover:border-[var(--accent)] transition-colors duration-200"
-                    >
-                      <iframe
-                        className="rounded-t-xl"
-                        src={song.embed}
-                        width="100%"
-                        height="152"
-                        frameBorder="0"
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+      <motion.div
+        initial="collapsed"
+        animate={isExpanded ? "expanded" : "collapsed"}
+        variants={{
+          expanded: { height: "auto", opacity: 1, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
+          collapsed: { height: 0, opacity: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } }
+        }}
+        className="overflow-hidden"
+      >
+        <div className="flex flex-col gap-12 pt-10">
+          
+          {/* Music Section */}
+          <div>
+            <div className="flex items-center gap-2 mb-6 text-[var(--text-main)]">
+              <Play size={16} />
+              <h3 className="text-base font-semibold uppercase tracking-widest text-[var(--text-muted)]">Music</h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
+              {songs.map((song, index) => (
+                <motion.div
+                  key={index}
+                  variants={{
+                    expanded: { 
+                      opacity: 1, 
+                      y: 0, 
+                      transition: { duration: 0.4, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] } 
+                    },
+                    collapsed: { 
+                      opacity: 0, 
+                      y: 10,
+                      transition: { duration: 0.2 }
+                    }
+                  }}
+                  className="rounded-xl overflow-hidden border border-[var(--border)] hover:border-[var(--accent)] transition-colors duration-200"
+                >
+                  <iframe
+                    className="rounded-t-xl"
+                    src={song.embed}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
 
-              {/* Borders separating sections visually if needed */}
+          {/* Borders separating sections visually if needed */}
               <div className="h-px w-full bg-[var(--border)]/50" />
 
               {/* Movies Section */}
@@ -175,9 +183,10 @@ export default function Hobbies() {
                         target="_blank"
                         rel="noreferrer"
                         key={movie.id || index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] }}
+                        variants={{
+                          expanded: { opacity: 1, y: 0, transition: { duration: 0.4, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] } },
+                          collapsed: { opacity: 0, y: 10, transition: { duration: 0.2 } }
+                        }}
                         className="group flex items-center gap-4 sm:gap-5 py-3 px-2 sm:px-4 rounded-xl hover:bg-[var(--bg-card)]/50 transition-all z-10"
                       >
                         {/* Poster */}
@@ -224,9 +233,7 @@ export default function Hobbies() {
               </div>
 
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </motion.div>
     </section>
   );
 }
