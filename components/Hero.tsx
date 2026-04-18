@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="section container-narrow pt-44 pb-28 flex flex-col-reverse md:flex-row items-center md:items-start justify-between gap-16"
+      className="section container-narrow min-h-[85vh] pt-40 md:pt-48 pb-28 flex flex-col-reverse md:flex-row items-center md:items-center justify-between gap-16"
     >
       {/* Text — left-aligned, asymmetric weight */}
       <motion.div

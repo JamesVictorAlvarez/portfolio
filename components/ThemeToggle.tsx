@@ -27,11 +27,24 @@ export default function ThemeToggle() {
       aria-label="Toggle theme"
       className="
         flex items-center justify-center
-        w-7 h-7
-        rounded-full
-        text-[var(--text-muted)] hover:text-[var(--accent)]
-        transition-colors duration-200
+        w-8 h-8
+        rounded-lg
+        text-[var(--text-muted)] hover:text-[var(--text-main)]
+        cursor-pointer
       "
+      style={{
+        transition:
+          "color 0.2s cubic-bezier(0.16,1,0.3,1), transform 140ms ease-out",
+      }}
+      onMouseDown={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(0.92)";
+      }}
+      onMouseUp={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+      }}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
@@ -39,10 +52,10 @@ export default function ThemeToggle() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-          className="text-xs font-medium select-none"
+          transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          className="text-[11px] font-medium tracking-wide select-none leading-none"
         >
-          {isLight ? "dark" : "light"}
+          {isLight ? "Dark" : "Light"}
         </motion.span>
       </AnimatePresence>
     </button>
