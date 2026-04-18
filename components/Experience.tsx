@@ -1,52 +1,27 @@
 "use client";
 import { motion } from "motion/react";
+import Image from "next/image";
 
 export default function Experience() {
   const items = [
     {
+      role: "Full Stack Developer",
+      org: "Université de Montréal",
+      period: "Feb 2026 - Present",
+      logo: "/udem.png",
+      points: [
+        "Designed and built Elearning platform.",
+        "Managed task delegation as a team lead.",
+      ],
+    },
+    {
       role: "Software Intern",
       org: "MR Control Systems International",
       period: "May – Aug 2024",
+      logo: "/mr_control_logo.jpg",
       points: [
         "Built IoT automation dashboards.",
         "Integrated Sinolta data sources; improved ops efficiency.",
-      ],
-    },
-    {
-      role: "GameJam UdeM",
-      org: "Université de Montréal",
-      period: "May 2025",
-      points: [
-        "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences.",
-        "Built in Unity using C#, with each level presenting unique challenges.",
-      ],
-    },
-    {
-      role: "ConUHacks IX",
-      org: "Concordia University",
-      period: "Feb 2025",
-      points: [
-        "Implemented a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics.",
-        "Developed a multiplayer architecture supporting both TCP and UDP sockets.",
-      ],
-    },
-    {
-      role: "JACHacks",
-      org: "John Abbott College",
-      period: "May 2024",
-      points: [
-        "Winner of Valnet Mini Challenge.",
-        "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP models.",
-        "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites.",
-      ],
-    },
-    {
-      role: "GameJam DINGO",
-      org: "Vanier College",
-      period: "Jan 2024",
-      points: [
-        "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
-        "Implemented custom C# scripts for camera control, state management.",
       ],
     },
   ];
@@ -74,28 +49,32 @@ export default function Experience() {
             viewport={{ once: true }}
             className="relative group border-l-2 border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors duration-300"
           >
-            <span className="absolute -left-[5px] top-2 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
+            <span className="absolute -left-[5px] top-6 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
 
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h3 className="text-base font-semibold text-[var(--text-main)]">
-                {e.role}
-              </h3>
-              <span className="text-sm text-[var(--text-muted)]">
-                {e.org}
-              </span>
-              <span className="muted ml-auto text-xs font-medium tabular-nums">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <div className="w-11 h-11 relative overflow-hidden flex-shrink-0 rounded-full bg-transparent group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
+                <Image src={e.logo} alt={e.org} fill className="object-cover" sizes="44px" />
+              </div>
+              <div className="flex flex-col">
+                <h3 className="text-base font-semibold text-[var(--text-main)] leading-tight">
+                  {e.role}
+                </h3>
+                <span className="text-sm text-[var(--text-muted)] mt-0.5">
+                  {e.org}
+                </span>
+              </div>
+              <span className="muted ml-auto text-xs font-medium tabular-nums pl-4 pt-1">
                 {e.period}
               </span>
             </div>
 
-            <ul className="mt-3 space-y-1.5 text-sm text-[var(--text-muted)] leading-relaxed">
+            <div className="mt-4 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
               {e.points.map((pt, j) => (
-                <li key={j} className="flex items-start gap-2.5">
-                  <span className="text-[var(--accent)] text-[10px] mt-1.5 flex-shrink-0">■</span>
-                  <span>{pt}</span>
-                </li>
+                <p key={j} className="text-[var(--text-muted)]">
+                  {pt}
+                </p>
               ))}
-            </ul>
+            </div>
           </motion.div>
         ))}
       </div>
