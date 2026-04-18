@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 export default function ThemeToggle() {
   const [isLight, setIsLight] = useState(false);
@@ -28,27 +28,36 @@ export default function ThemeToggle() {
       aria-label="Toggle theme"
       className="
         flex items-center justify-center
-        w-6 h-6 /* visually slim */
+        w-8 h-8
+        rounded-lg
+        text-[var(--text-muted)] hover:text-[var(--text-main)]
         cursor-pointer
-        text-[var(--text-main)] hover:text-[var(--accent)]
-        transition-transform duration-300
-        hover:scale-110
       "
+      style={{
+        transition:
+          "color 0.2s cubic-bezier(0.16,1,0.3,1), transform 140ms ease-out",
+      }}
+      onMouseDown={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(0.92)";
+      }}
+      onMouseUp={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+      }}
     >
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={isLight ? 'sun' : 'moon'}
-          initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
-          animate={{ rotate: 0, opacity: 1, scale: 1 }}
-          exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
+        <motion.span
+          key={isLight ? "light" : "dark"}
+          initial={{ opacity: 0, scale: 0.9, rotate: isLight ? -90 : 90 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 0.9, rotate: isLight ? 90 : -90 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-center text-[15px]"
         >
-          {isLight ? (
-            <Sun size={18} strokeWidth={1.5} />
-          ) : (
-            <Moon size={18} strokeWidth={1.5} />
-          )}
-        </motion.div>
+          {isLight ? <FiSun /> : <FiMoon />}
+        </motion.span>
       </AnimatePresence>
     </button>
   );
