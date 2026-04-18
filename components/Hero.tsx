@@ -79,6 +79,7 @@ export default function Hero() {
             className="object-cover"
             sizes="(max-width: 768px) 224px, 288px"
             priority
+            unoptimized={true}
           />
         </div>
       </motion.div>

@@ -54,7 +54,7 @@ export default function Experience() {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="w-11 h-11 relative overflow-hidden flex-shrink-0 rounded-full bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-center group-hover:border-[var(--accent)] transition-all duration-300">
                 {e.logo ? (
-                  <Image src={e.logo} alt={e.org} fill className="object-cover opacity-90 group-hover:opacity-100 transition-all duration-300" sizes="44px" />
+                  <Image src={e.logo} alt={e.org} fill className="object-cover opacity-90 group-hover:opacity-100 transition-all duration-300" sizes="44px" unoptimized={true} />
                 ) : (
                   <span className="text-xs font-bold text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors">{e.org.split(" ").slice(0, 2).map(n => n[0]).join("")}</span>
                 )}
