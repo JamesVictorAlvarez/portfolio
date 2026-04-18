@@ -4,7 +4,7 @@ import Hackathons from "@/components/Hackathons";
 import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Footer from "@/components/Footer";
-import Music from "@/components/Music";
+import Hobbies from "@/components/Hobbies";
 
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
       <Experience />
       <Hackathons />
       <Projects />
-      <Music />
+      <Hobbies />
       <Footer />
     </main>
   );

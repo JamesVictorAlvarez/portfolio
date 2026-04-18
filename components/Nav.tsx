@@ -9,7 +9,7 @@ const LINKS = [
   { name: "experience", href: "#experience", id: "experience" },
   { name: "hackathons", href: "#hackathons", id: "hackathons" },
   { name: "projects", href: "#projects", id: "projects" },
-  { name: "music", href: "#music", id: "music" },
+  { name: "hobbies", href: "#hobbies", id: "hobbies" },
 ];
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];

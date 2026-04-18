@@ -3,12 +3,8 @@ import { HiOutlineMail } from "react-icons/hi";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--border)]">
+    <footer className="">
       <div className="section container-narrow py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <p className="text-sm text-[var(--text-muted)]">
-          &copy; {new Date().getFullYear()} James Victor Alvarez
-        </p>
-
         <div className="flex items-center gap-5">
           <a
             href="https://github.com/JamesVictorAlvarez"

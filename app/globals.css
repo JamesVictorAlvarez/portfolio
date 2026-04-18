@@ -9,7 +9,8 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-html, body {
+html,
+body {
   scroll-behavior: smooth;
 }
 
@@ -46,7 +47,8 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-html, body {
+html,
+body {
   transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out);
 }
 
@@ -55,8 +57,13 @@ html, body {
   @apply mx-auto px-6 py-20;
 }
 
-.container-narrow { max-width: 46rem; }
-.container-wide   { max-width: 64rem; }
+.container-narrow {
+  max-width: 46rem;
+}
+
+.container-wide {
+  max-width: 64rem;
+}
 
 /* ── Typography ── */
 .h2 {
@@ -105,6 +112,7 @@ a:not(nav a) {
   text-decoration-color: var(--border);
   transition: color 0.2s var(--ease-out), text-decoration-color 0.2s var(--ease-out);
 }
+
 a:not(nav a):hover {
   color: var(--accent-hover);
   text-decoration-color: var(--accent-hover);
@@ -116,13 +124,15 @@ a:not(nav a):hover {
   color: var(--bg-main);
   @apply font-medium px-5 py-2 rounded-lg no-underline;
   transition: background-color 0.2s var(--ease-out),
-              color 0.2s var(--ease-out),
-              transform 160ms ease-out;
+    color 0.2s var(--ease-out),
+    transform 160ms ease-out;
 }
+
 .btn:hover {
   background-color: var(--accent-hover);
   color: var(--bg-main);
 }
+
 .btn:active {
   transform: scale(0.97);
 }
@@ -160,8 +170,8 @@ section[id] {
 .bg-dither {
   background-color: var(--bg-main);
   background-image:
-    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 0),
-    radial-gradient(rgba(255,255,255,0.025) 1px, transparent 0);
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0),
+    radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 0);
   background-position: 0 0, 2px 2px;
   background-size: 4px 4px;
   opacity: 0.5;
@@ -170,17 +180,22 @@ section[id] {
 /* ── Grain / dither overlay (light mode) ── */
 html.light .bg-dither {
   background-image:
-    linear-gradient(125deg, rgba(5,5,5,0.05) 0%, rgba(0,0,0,0.015) 100%),
-    linear-gradient(45deg, rgba(5,5,5,0.06) 0%, rgba(255,255,255,0.01) 100%);
+    linear-gradient(125deg, rgba(5, 5, 5, 0.05) 0%, rgba(0, 0, 0, 0.015) 100%),
+    linear-gradient(45deg, rgba(5, 5, 5, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
   mix-blend-mode: multiply;
   opacity: 0.2;
 }
 
 /* ── Interactive element transitions (scoped, not blanket *) ── */
-a:not(nav a), button, .card, input, textarea, select {
+a:not(nav a),
+button,
+.card,
+input,
+textarea,
+select {
   transition: color 0.2s var(--ease-out),
-              background-color 0.2s var(--ease-out),
-              border-color 0.2s var(--ease-out),
-              transform 160ms ease-out,
-              opacity 0.2s var(--ease-out);
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    transform 160ms ease-out,
+    opacity 0.2s var(--ease-out);
 }

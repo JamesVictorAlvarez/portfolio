@@ -1,7 +1,7 @@
 "use client";
 import { useScrollSpy } from "@/components/hooks/useScrollSpy";
 
-const SECTIONS = ["home", "experience", "projects", "skills", "music"];
+const SECTIONS = ["home", "experience", "hackathons", "projects", "hobbies"];
 
 export default function ScrollTracker() {
   const active = useScrollSpy({ ids: SECTIONS });
