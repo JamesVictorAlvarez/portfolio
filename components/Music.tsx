@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "motion/react";
-import { Music2 } from "lucide-react";
 
 const songs = [
   {
@@ -36,48 +35,33 @@ export default function Music() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
         viewport={{ once: true }}
-        className="flex items-center gap-2 mb-8"
+        className="mb-10"
       >
-        <Music2 className="text-[var(--accent)]" size={22} />
-        <h2 className="h2">My Favourite Music</h2>
+        <p className="label mb-2">On repeat</p>
+        <h2 className="h2">Music I like</h2>
       </motion.div>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="muted mb-8 max-w-md"
-      >
-        Music I&apos;ve been listening to on repeat :)
-      </motion.p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
         {songs.map((song, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="bg-[var(--bg-alt)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_20px_var(--accent)] transition"
+            transition={{ duration: 0.4, delay: index * 0.07, ease: [0.23, 1, 0.32, 1] }}
+            className="rounded-xl overflow-hidden border border-[var(--border)] hover:border-[var(--accent)] transition-colors duration-200"
           >
             <iframe
-              style={{ borderRadius: "12px" }}
+              className="rounded-t-xl"
               src={song.embed}
               width="100%"
               height="152"
               frameBorder="0"
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
-            ></iframe>
-            <div className="p-3 text-left">
-              <h3 className="text-[var(--text-main)] font-semibold text-base leading-tight">
-                {song.title}
-              </h3>
-              <p className="text-sm text-[var(--text-muted)]">{song.artist}</p>
-            </div>
+            />
           </motion.div>
         ))}
       </div>

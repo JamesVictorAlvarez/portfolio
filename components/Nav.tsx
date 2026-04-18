@@ -38,7 +38,7 @@ export default function Nav() {
       className={`
         fixed top-4 left-1/2 -translate-x-1/2 z-50
         bg-[var(--bg-alt)]/80 backdrop-blur-md border border-[var(--border)]
-        rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.4)]
+        rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.15)]
         px-8 py-3 flex items-center gap-8
         transition-all duration-300
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}
@@ -48,13 +48,19 @@ export default function Nav() {
         <a
           key={l.id}
           href={l.href}
-          className={`text-sm underline-offset-4 transition ${
-            active === l.id
-              ? "text-[var(--accent)] font-semibold"
-              : "text-[var(--text-main)] hover:text-[var(--accent)]"
-          }`}
+          className={`
+            text-sm no-underline transition-colors duration-200 relative
+            ${
+              active === l.id
+                ? "text-[var(--accent)] font-medium"
+                : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
+            }
+          `}
         >
           {l.name}
+          {active === l.id && (
+            <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--accent)]" />
+          )}
         </a>
       ))}
       <ThemeToggle />

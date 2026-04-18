@@ -2,86 +2,135 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Custom easing curves (Emil Kowalski recommendations) ── */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 html, body {
   scroll-behavior: smooth;
 }
 
+/* ── Dark mode (default) ── */
 :root {
-  --bg-main: #141415;
-  --text-main: #cdcdcd;
-  --bg-alt: #1c1c24;
-  --accent: #7e98e8;
-  --border: #333738;
-  --accent-warn: #f3be7c;
-  --accent-error: #d8647e;
+  --bg-main: #10121a;
+  --bg-alt: #181c28;
+  --text-main: #c8cdd8;
+  --text-muted: #6b7280;
+  --accent: #7b93d8;
+  --accent-hover: #94abea;
+  --border: #262c3a;
+  --accent-warn: #d4a64e;
+  --accent-error: #c7616f;
 }
 
+/* ── Light mode ── */
 html.light {
-  --bg-main: #efe9de;      
-  --text-main: #2b2b2b;
-  --bg-alt: #e3ddd2;        
-  --accent: #7e98e8;
-  --border: #d3cbbd;
-  --accent-warn: #f3be7c;
-  --accent-error: #d8647e;
+  --bg-main: #f3f4f8;
+  --bg-alt: #e8eaf0;
+  --text-main: #2a2d35;
+  --text-muted: #6b7080;
+  --accent: #5a73c4;
+  --accent-hover: #4960ab;
+  --border: #d0d4dc;
+  --accent-warn: #b8923a;
+  --accent-error: #b5505e;
 }
 
 body {
   @apply antialiased;
   background-color: var(--bg-main);
   color: var(--text-main);
+  font-variant-numeric: tabular-nums;
 }
 
+html, body {
+  transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out);
+}
+
+/* ── Section container ── */
 .section {
-  @apply mx-auto px-6 py-16;
+  @apply mx-auto px-6 py-20;
 }
 
 .container-narrow { max-width: 46rem; }
 .container-wide   { max-width: 64rem; }
 
-.h2 { @apply text-3xl font-semibold tracking-tight; color: var(--text-main); }
-.h3 { @apply text-xl font-semibold; color: var(--text-main); }
-.muted { color: var(--text-muted); }
+/* ── Typography ── */
+.h2 {
+  @apply text-3xl font-semibold tracking-tight;
+  color: var(--text-main);
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
 
+.h3 {
+  @apply text-xl font-semibold;
+  color: var(--text-main);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.label {
+  @apply text-xs uppercase font-medium;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* ── Cards ── */
 .card {
   background-color: var(--bg-alt);
   border: 1px solid var(--border);
-  @apply rounded-2xl transition;
+  @apply rounded-xl transition-colors duration-200;
 }
 
-.divider { border-color: var(--border); }
+.card:hover {
+  border-color: var(--accent);
+}
 
+/* ── Divider ── */
+.divider {
+  border-color: var(--border);
+}
+
+/* ── Links ── */
 a {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-color: var(--border);
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  transition: color 0.2s var(--ease-out), text-decoration-color 0.2s var(--ease-out);
 }
 a:hover {
-  color: var(--accent-warn);
-  text-decoration-color: var(--accent-warn);
+  color: var(--accent-hover);
+  text-decoration-color: var(--accent-hover);
 }
 
+/* ── Buttons ── */
 .btn {
   background-color: var(--accent);
   color: var(--bg-main);
   @apply font-medium px-5 py-2 rounded-lg no-underline;
-  transition: background-color .2s ease, color .2s ease;
+  transition: background-color 0.2s var(--ease-out),
+              color 0.2s var(--ease-out),
+              transform 160ms ease-out;
 }
 .btn:hover {
-  background-color: var(--accent-warn);
+  background-color: var(--accent-hover);
   color: var(--bg-main);
 }
-
-.card:hover {
-  border-color: var(--accent);
-  background-color: var(--bg-alt);
+.btn:active {
+  transform: scale(0.97);
 }
 
+/* ── Scrollbar ── */
 ::-webkit-scrollbar {
   width: 10px;
-  height: 10px; 
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -92,7 +141,6 @@ a:hover {
   background: var(--border);
   border-radius: 9999px;
   border: 2px solid var(--bg-main);
-  transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -108,43 +156,31 @@ section[id] {
   scroll-margin-top: 7rem;
 }
 
-body, a, button {
-  cursor: none !important;
-}
-
+/* ── Grain / dither overlay (dark mode) ── */
 .bg-dither {
   background-color: var(--bg-main);
   background-image:
-    radial-gradient(rgba(255,255,255,0.06) 1px, transparent 0), 
-    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 0);
+    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 0),
+    radial-gradient(rgba(255,255,255,0.025) 1px, transparent 0);
   background-position: 0 0, 2px 2px;
-  background-size: 5px 5px;
-  animation: ditherMove 12s linear infinite;
-  mix-blend-mode: lighten;
-  opacity: 0.6; 
+  background-size: 4px 4px;
+  opacity: 0.5;
 }
 
-@keyframes ditherMove {
-  from {
-    background-position: 0 0, 2px 2px;
-  }
-  to {
-    background-position: 200px 200px, 202px 202px;
-  }
-}
-
-html, body {
-  transition: background-color 0.6s ease, color 0.6 ease;
-}
-
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
+/* ── Grain / dither overlay (light mode) ── */
 html.light .bg-dither {
   background-image:
-    linear-gradient(125deg, rgba(5,5,5,0.07) 0%, rgba(0,0,0,0.02) 100%),
-    linear-gradient(45deg, rgba(5,5,5,0.09) 0%, rgba(255,255,255,0.01) 100%);
+    linear-gradient(125deg, rgba(5,5,5,0.05) 0%, rgba(0,0,0,0.015) 100%),
+    linear-gradient(45deg, rgba(5,5,5,0.06) 0%, rgba(255,255,255,0.01) 100%);
   mix-blend-mode: multiply;
-  opacity: 0.25;
+  opacity: 0.2;
+}
+
+/* ── Interactive element transitions (scoped, not blanket *) ── */
+a, button, .card, input, textarea, select, nav {
+  transition: color 0.2s var(--ease-out),
+              background-color 0.2s var(--ease-out),
+              border-color 0.2s var(--ease-out),
+              transform 160ms ease-out,
+              opacity 0.2s var(--ease-out);
 }

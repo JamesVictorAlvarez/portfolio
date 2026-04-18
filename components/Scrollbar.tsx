@@ -12,10 +12,10 @@ export default function ScrollTracker() {
         <a
           key={id}
           href={`#${id}`}
-          className={`relative block w-[3px] h-10 rounded-full transition-all duration-300
+          className={`relative block w-[3px] h-10 rounded-full no-underline transition-all duration-300
             ${
               active === id
-                ? "bg-[var(--accent)] scale-110 shadow-[0_0_6px_var(--accent)]"
+                ? "bg-[var(--accent)] scale-110"
                 : "bg-[var(--border)] hover:bg-[var(--text-muted)]"
             }
           `}

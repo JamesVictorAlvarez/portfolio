@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "motion/react";
-import { Briefcase } from "lucide-react";
 
 export default function Experience() {
   const items = [
@@ -37,7 +36,7 @@ export default function Experience() {
       period: "May 2024",
       points: [
         "Winner of Valnet Mini Challenge.",
-        "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP/AI models.",
+        "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP models.",
         "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites.",
       ],
     },
@@ -47,7 +46,7 @@ export default function Experience() {
       period: "Jan 2024",
       points: [
         "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
-        "Implemented custom C# scripts for camera control, state management",
+        "Implemented custom C# scripts for camera control, state management.",
       ],
     },
   ];
@@ -57,40 +56,42 @@ export default function Experience() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
         viewport={{ once: true }}
-        className="flex items-center gap-2 mb-8"
+        className="mb-10"
       >
-        <Briefcase className="text-[var(--accent)]" size={22} />
+        <p className="label mb-2">Background</p>
         <h2 className="h2">Experience</h2>
       </motion.div>
-      
+
       <div className="flex flex-col space-y-10">
         {items.map((e, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.05 }}
+            transition={{ duration: 0.4, delay: i * 0.06, ease: [0.23, 1, 0.32, 1] }}
             viewport={{ once: true }}
-            className="relative group border-l border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors"
+            className="relative group border-l-2 border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors duration-300"
           >
-            <span className="absolute -left-[7px] top-2 w-3 h-3 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors" />
+            <span className="absolute -left-[5px] top-2 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
 
-            <div className="flex flex-wrap items-baseline gap-2">
-              <h3 className="text-lg font-semibold text-[var(--text-main)]">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h3 className="text-base font-semibold text-[var(--text-main)]">
                 {e.role}
               </h3>
-              <span className="text-[var(--accent)] text-sm">@ {e.org}</span>
-              <span className="muted ml-auto text-xs font-medium">
+              <span className="text-sm text-[var(--text-muted)]">
+                {e.org}
+              </span>
+              <span className="muted ml-auto text-xs font-medium tabular-nums">
                 {e.period}
               </span>
             </div>
 
-            <ul className="mt-3 space-y-1.5 text-sm text-[var(--text-main)]/80 leading-relaxed">
+            <ul className="mt-3 space-y-1.5 text-sm text-[var(--text-muted)] leading-relaxed">
               {e.points.map((pt, j) => (
-                <li key={j} className="flex items-start gap-2">
-                  <span className="text-[var(--accent)] text-xs mt-0.5">•</span>
+                <li key={j} className="flex items-start gap-2.5">
+                  <span className="text-[var(--accent)] text-[10px] mt-1.5 flex-shrink-0">■</span>
                   <span>{pt}</span>
                 </li>
               ))}

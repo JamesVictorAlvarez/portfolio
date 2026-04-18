@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed } from "next/font/google";
+import { Geist } from "next/font/google";
 import Scrollbar from "@/components/Scrollbar";
-import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
-const barlowCondensed = Barlow_Condensed({
+const geist = Geist({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
@@ -12,7 +11,12 @@ const barlowCondensed = Barlow_Condensed({
 
 export const metadata: Metadata = {
   title: "James Victor Alvarez",
-  description: "Computer Science Student • Portfolio & Projects",
+  description: "Computer Science student at Concordia University — portfolio and projects.",
+  openGraph: {
+    title: "James Victor Alvarez",
+    description: "Computer Science student at Concordia University — portfolio and projects.",
+    type: "website",
+  },
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -37,12 +41,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${barlowCondensed.className} relative bg-[var(--bg-main)] text-[var(--text-main)] overflow-x-hidden`}
+        className={`${geist.className} relative bg-[var(--bg-main)] text-[var(--text-main)] overflow-x-hidden`}
       >
         <div className="fixed inset-0 -z-10 pointer-events-none bg-dither" />
         {children}
         <Scrollbar />
-        <CustomCursor />
       </body>
     </html>
   );

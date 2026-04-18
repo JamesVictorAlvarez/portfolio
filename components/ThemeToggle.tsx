@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Sun, Moon } from "lucide-react";
 
 export default function ThemeToggle() {
   const [isLight, setIsLight] = useState(false);
@@ -28,27 +27,23 @@ export default function ThemeToggle() {
       aria-label="Toggle theme"
       className="
         flex items-center justify-center
-        w-6 h-6 /* visually slim */
-        cursor-pointer
-        text-[var(--text-main)] hover:text-[var(--accent)]
-        transition-transform duration-300
-        hover:scale-110
+        w-7 h-7
+        rounded-full
+        text-[var(--text-muted)] hover:text-[var(--accent)]
+        transition-colors duration-200
       "
     >
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={isLight ? 'sun' : 'moon'}
-          initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
-          animate={{ rotate: 0, opacity: 1, scale: 1 }}
-          exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
+        <motion.span
+          key={isLight ? "light" : "dark"}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+          className="text-xs font-medium select-none"
         >
-          {isLight ? (
-            <Sun size={18} strokeWidth={1.5} />
-          ) : (
-            <Moon size={18} strokeWidth={1.5} />
-          )}
-        </motion.div>
+          {isLight ? "dark" : "light"}
+        </motion.span>
       </AnimatePresence>
     </button>
   );
