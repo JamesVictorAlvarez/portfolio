@@ -9,7 +9,6 @@ const LINKS = [
   { name: "experience", href: "#experience", id: "experience" },
   { name: "hackathons", href: "#hackathons", id: "hackathons" },
   { name: "projects", href: "#projects", id: "projects" },
-  { name: "skills", href: "#skills", id: "skills" },
   { name: "music", href: "#music", id: "music" },
 ];
 

@@ -4,6 +4,15 @@ import { motion } from "motion/react";
 export default function Hackathons() {
   const items = [
     {
+      role: "ConUHacks X",
+      org: "Concordia University",
+      period: "Feb 2026",
+      points: [
+        "Engineered a custom web agent to autonomously drop out.",
+        "Integrated AI decision-making to allow the agent to dynamically interpret unclear user flows.",
+      ],
+    },
+    {
       role: "GameJam UdeM",
       org: "Université de Montréal",
       period: "May 2025",
