@@ -30,9 +30,8 @@ export default function Hero() {
           className="muted text-base leading-relaxed mb-10"
           style={{ maxWidth: "50ch" }}
         >
-          I build visually minimal software and incremental games.
           Currently studying CS and looking for opportunities to
-          ship real products.
+          ship real products. I love working on side projects that involve AI and Web Development.
         </p>
 
         <div className="flex items-center gap-5">

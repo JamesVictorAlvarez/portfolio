@@ -51,52 +51,93 @@ export default function Hackathons() {
     },
   ];
 
+  const isLeft = (i: number) => i % 2 === 0;
+
   return (
-    <section id="hackathons" className="section container-narrow pt-0 md:pt-0">
+    <section id="hackathons" className="section container-wide pt-0 md:pt-0">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
         viewport={{ once: true }}
-        className="mb-10"
+        className="mb-14 text-center"
       >
-        <p className="label mb-2">Events & Competitions</p>
+        <p className="label mb-2">Events &amp; Competitions</p>
         <h2 className="h2">Hackathons</h2>
       </motion.div>
 
-      <div className="flex flex-col space-y-10">
-        {items.map((e, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.06, ease: [0.23, 1, 0.32, 1] }}
-            viewport={{ once: true }}
-            className="relative group border-l-2 border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors duration-300"
-          >
-            <span className="absolute -left-[5px] top-2 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
+      {/* ── Timeline wrapper ── */}
+      <div className="relative">
+        {/* Center vertical line – visible on md+ */}
+        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border)]" />
 
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h3 className="text-base font-semibold text-[var(--text-main)]">
-                {e.role}
-              </h3>
-              <span className="text-sm text-[var(--text-muted)]">
-                {e.org}
-              </span>
-              <span className="muted ml-auto text-xs font-medium tabular-nums">
-                {e.period}
-              </span>
-            </div>
+        {/* Left-side line – visible on mobile only */}
+        <div className="block md:hidden absolute left-[11px] top-0 bottom-0 w-px bg-[var(--border)]" />
 
-            <div className="mt-4 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
-              {e.points.map((pt, j) => (
-                <p key={j} className="text-[var(--text-muted)]">
-                  {pt}
-                </p>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+        <div className="flex flex-col gap-12 md:gap-16">
+          {items.map((e, i) => {
+            const left = isLeft(i);
+
+            return (
+              <div key={i} className="relative md:grid md:grid-cols-2 md:gap-10">
+                {/* ── Center dot (md+) ── */}
+                <span className="hidden md:block absolute left-1/2 top-3 w-3 h-3 -translate-x-1/2 rounded-full border-2 border-[var(--border)] bg-[var(--bg-main)] z-10 transition-colors duration-300" />
+
+                {/* ── Mobile dot ── */}
+                <span className="block md:hidden absolute left-[6px] top-[6px] w-[11px] h-[11px] rounded-full border-2 border-[var(--border)] bg-[var(--bg-main)] z-10 transition-colors duration-300" />
+
+                {/* ── Card content ── */}
+                <motion.div
+                  initial={{ opacity: 0, x: left ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.08,
+                    ease: [0.23, 1, 0.32, 1],
+                  }}
+                  viewport={{ once: true }}
+                  className={`group pl-8 md:pl-0 ${
+                    left
+                      ? "md:pr-10 md:text-right md:col-start-1 md:row-start-1"
+                      : "md:pl-10 md:text-left md:col-start-2 md:row-start-1"
+                  }`}
+                >
+                  {/* Period pill */}
+                  <span className="inline-block text-[10px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-3 bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
+                    {e.period}
+                  </span>
+
+                  <h3 className="text-lg font-semibold text-[var(--text-main)] leading-snug">
+                    {e.role}
+                  </h3>
+                  <p className="text-sm text-[var(--text-muted)] mt-0.5">
+                    {e.org}
+                  </p>
+
+                  <div className="mt-3 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
+                    {e.points.map((pt, j) => (
+                      <p key={j}>{pt}</p>
+                    ))}
+                  </div>
+
+                  {/* Subtle hover accent bar */}
+                  <div
+                    className={`hidden md:block mt-4 h-[2px] w-12 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300 ${
+                      left ? "ml-auto" : "mr-auto"
+                    }`}
+                  />
+                </motion.div>
+
+                {/* ── Empty spacer column (md+) ── */}
+                <div
+                  className={`hidden md:block ${
+                    left ? "md:col-start-2" : "md:col-start-1"
+                  } md:row-start-1`}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
