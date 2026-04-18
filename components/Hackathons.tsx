@@ -119,7 +119,7 @@ export default function Hackathons() {
                       alt={`${e.role} logo`}
                       width={44}
                       height={44}
-                      className="rounded-lg object-contain shrink-0 opacity-80"
+                      className="w-auto h-auto rounded-lg object-contain shrink-0 opacity-80"
                     />
                     <div>
                       <h3 className="text-lg font-semibold text-[var(--text-main)] leading-snug">
