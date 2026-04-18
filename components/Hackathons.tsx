@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "motion/react";
+import Image from "next/image";
 
 export default function Hackathons() {
   const items = [
@@ -7,6 +8,7 @@ export default function Hackathons() {
       role: "ConUHacks X",
       org: "Concordia University",
       period: "Feb 2026",
+      logo: "/conuhacks10.png",
       points: [
         "Engineered a custom web agent to autonomously drop out.",
         "Integrated AI decision-making to allow the agent to dynamically interpret unclear user flows.",
@@ -16,6 +18,7 @@ export default function Hackathons() {
       role: "GameJam UdeM",
       org: "Université de Montréal",
       period: "May 2025",
+      logo: "/UdeM_game.png",
       points: [
         "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences.",
         "Built in Unity using C#, with each level presenting unique challenges.",
@@ -25,6 +28,7 @@ export default function Hackathons() {
       role: "ConUHacks IX",
       org: "Concordia University",
       period: "Feb 2025",
+      logo: "/conuhacks9.png",
       points: [
         "Implemented a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics.",
         "Developed a multiplayer architecture supporting both TCP and UDP sockets.",
@@ -34,6 +38,7 @@ export default function Hackathons() {
       role: "JACHacks",
       org: "John Abbott College",
       period: "May 2024",
+      logo: "/jachacks.png",
       points: [
         "Winner of Valnet Mini Challenge.",
         "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP models.",
@@ -44,6 +49,7 @@ export default function Hackathons() {
       role: "GameJam DINGO",
       org: "Vanier College",
       period: "Jan 2024",
+      logo: "/dingo.png",
       points: [
         "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
         "Implemented custom C# scripts for camera control, state management.",
@@ -54,7 +60,7 @@ export default function Hackathons() {
   const isLeft = (i: number) => i % 2 === 0;
 
   return (
-    <section id="hackathons" className="section container-wide pt-0 md:pt-0">
+    <section id="hackathons" className="section container-narrow">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -103,16 +109,27 @@ export default function Hackathons() {
                   }`}
                 >
                   {/* Period pill */}
-                  <span className="inline-block text-[10px] uppercase tracking-widest font-semibold px-3 py-1 rounded-full mb-3 bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
+                  <span className="inline-block text-[10px] uppercase tracking-widest font-semibold py-1 mb-3 text-[var(--accent)]">
                     {e.period}
                   </span>
 
-                  <h3 className="text-lg font-semibold text-[var(--text-main)] leading-snug">
-                    {e.role}
-                  </h3>
-                  <p className="text-sm text-[var(--text-muted)] mt-0.5">
-                    {e.org}
-                  </p>
+                  <div className={`flex items-center gap-4 ${left ? "md:flex-row-reverse" : ""}`}>
+                    <Image
+                      src={e.logo}
+                      alt={`${e.role} logo`}
+                      width={44}
+                      height={44}
+                      className="rounded-lg object-contain shrink-0 opacity-80"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold text-[var(--text-main)] leading-snug">
+                        {e.role}
+                      </h3>
+                      <p className="text-sm text-[var(--text-muted)] mt-0.5">
+                        {e.org}
+                      </p>
+                    </div>
+                  </div>
 
                   <div className="mt-3 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
                     {e.points.map((pt, j) => (
