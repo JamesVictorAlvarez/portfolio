@@ -52,8 +52,12 @@ export default function Experience() {
             <span className="absolute -left-[5px] top-6 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <div className="w-11 h-11 relative overflow-hidden flex-shrink-0 rounded-full bg-transparent group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300">
-                <Image src={e.logo} alt={e.org} fill className="object-cover" sizes="44px" />
+              <div className="w-11 h-11 relative overflow-hidden flex-shrink-0 rounded-full bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-center group-hover:border-[var(--accent)] transition-all duration-300">
+                {e.logo ? (
+                  <Image src={e.logo} alt={e.org} fill className="object-cover opacity-90 group-hover:opacity-100 transition-all duration-300" sizes="44px" />
+                ) : (
+                  <span className="text-xs font-bold text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors">{e.org.split(" ").slice(0, 2).map(n => n[0]).join("")}</span>
+                )}
               </div>
               <div className="flex flex-col">
                 <h3 className="text-base font-semibold text-[var(--text-main)] leading-tight">

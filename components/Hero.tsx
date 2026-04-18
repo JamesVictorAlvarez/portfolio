@@ -73,7 +73,7 @@ export default function Hero() {
       >
         <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
           <Image
-            src="/me.jpg"
+            src="/Me.jpg"
             alt="James Victor Alvarez — portrait photo"
             fill
             className="object-cover"
