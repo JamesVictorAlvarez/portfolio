@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Interactive-friendly modern background -->
+  <rect x="5" y="5" width="90" height="90" rx="22" fill="#181c28" stroke="#262c3a" stroke-width="2"/>
+  
+  <!-- J Top Bar -->
+  <path d="M40 25 H75" stroke="#c8cdd8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- J Stem & Bowl -->
+  <path d="M60 25 V60 A 15 15 0 0 1 30 60 V55" stroke="#c8cdd8" stroke-width="8" stroke-linecap="round" fill="none"/>
+  
+  <!-- Tech Accent Dot -->
+  <circle cx="30" cy="25" r="5" fill="#7b93d8"/>
+</svg>

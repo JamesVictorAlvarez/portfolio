@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { useScrollSpy } from "@/components/hooks/useScrollSpy";
 import ThemeToggle from "@/components/ThemeToggle";
+import Logo from "@/components/Logo";
 
 const LINKS = [
   { name: "about", href: "#home", id: "home" },
@@ -38,6 +39,12 @@ export default function Nav() {
           pointer-events-auto
         "
       >
+        <a href="#home" aria-label="Home" className="px-2 hover:scale-95 transition-transform flex items-center justify-center">
+          <Logo className="w-5 h-5" />
+        </a>
+
+        <div className="w-px h-4 bg-[var(--border)]/40 mx-1" />
+
         {LINKS.map((l, i) => {
           const isActive = active === l.id;
 
