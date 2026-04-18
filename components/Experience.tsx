@@ -18,7 +18,7 @@ export default function Experience() {
       role: "Software Intern",
       org: "MR Control Systems International",
       period: "May – Aug 2024",
-      logo: "/mr_control_logo.jpg", // Uncomment & place image in 'public/' folder
+      logo: "/mr_control_logo.jpg",
       points: [
         "Built IoT automation dashboards.",
         "Integrated Sinolta data sources; improved ops efficiency.",
