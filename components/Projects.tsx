@@ -1,8 +1,8 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
-import { Rocket } from "lucide-react";
+import { motion } from "motion/react";
+import { ExternalLink, ChevronLeft, ChevronRight, Rocket } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 
 const projects = [
   {
@@ -145,7 +145,7 @@ export default function Projects() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 text-[var(--accent)] hover:text-[var(--accent-warn)]"
                     >
-                      <Github size={14}/> Code
+                      <FaGithub size={14}/> Code
                     </a>
                   )}
                 </div>

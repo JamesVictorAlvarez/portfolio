@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SiReact, SiTypescript, SiTailwindcss, SiJavascript, SiNextdotjs, SiDocker, SiNodedotjs, SiMysql, SiPhp, SiC, SiGit, SiLinux } from "react-icons/si";
 import { FaJava } from "react-icons/fa6";
 import { Wrench } from "lucide-react";
