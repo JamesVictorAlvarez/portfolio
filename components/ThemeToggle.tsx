@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 export default function ThemeToggle() {
   const [isLight, setIsLight] = useState(false);
@@ -49,13 +50,13 @@ export default function ThemeToggle() {
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={isLight ? "light" : "dark"}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[11px] font-medium tracking-wide select-none leading-none"
+          initial={{ opacity: 0, scale: 0.9, rotate: isLight ? -90 : 90 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 0.9, rotate: isLight ? 90 : -90 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-center text-[15px]"
         >
-          {isLight ? "Dark" : "Light"}
+          {isLight ? <FiSun /> : <FiMoon />}
         </motion.span>
       </AnimatePresence>
     </button>
