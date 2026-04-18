@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "motion/react";
 import Image from "next/image";
 
 export default function Experience() {
@@ -28,25 +27,16 @@ export default function Experience() {
 
   return (
     <section id="experience" className="section container-narrow">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        viewport={{ once: true }}
-        className="mb-10"
-      >
+      <div className="mb-10" data-animate="7">
         <p className="label mb-2">Background</p>
         <h2 className="h2">Experience</h2>
-      </motion.div>
+      </div>
 
       <div className="flex flex-col space-y-10">
         {items.map((e, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.06, ease: [0.23, 1, 0.32, 1] }}
-            viewport={{ once: true }}
+            data-animate={`${8 + i}`}
             className="relative group border-l-2 border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors duration-300"
           >
             <span className="absolute -left-[5px] top-6 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
@@ -79,7 +69,7 @@ export default function Experience() {
                 </p>
               ))}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { motion } from "motion/react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import { HiOutlineMail } from "react-icons/hi";
 
@@ -11,17 +10,15 @@ export default function Hero() {
       className="section container-narrow pt-40 md:pt-32 pb-28 flex flex-col-reverse md:flex-row items-center md:items-start justify-between gap-16"
     >
       {/* Text — left-aligned, asymmetric weight */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-        className="flex-1 max-w-lg"
-      >
-        <p className="label mb-4">Computer science · Concordia University</p>
+      <div className="flex-1 max-w-lg">
+        <p className="label mb-4" data-animate="2">
+          Computer science · Concordia University
+        </p>
 
         <h1
           className="text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
           style={{ letterSpacing: "-0.03em", textWrap: "balance" }}
+          data-animate="3"
         >
           James Victor Alvarez
         </h1>
@@ -29,12 +26,13 @@ export default function Hero() {
         <p
           className="muted text-base leading-relaxed mb-10"
           style={{ maxWidth: "50ch" }}
+          data-animate="4"
         >
           Currently studying CS and looking for opportunities to
           ship real products. I love working on side projects that involve AI and Web Development.
         </p>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5" data-animate="5">
           <a
             href="https://github.com/JamesVictorAlvarez"
             target="_blank"
@@ -61,15 +59,10 @@ export default function Hero() {
             <span>Email</span>
           </a>
         </div>
-      </motion.div>
+      </div>
 
       {/* Photo — right side, slight vertical offset for asymmetry */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-        className="flex-shrink-0 md:mt-6"
-      >
+      <div className="flex-shrink-0 md:mt-6" data-animate="6">
         <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
           <Image
             src="/me.jpg"
@@ -81,7 +74,7 @@ export default function Hero() {
             unoptimized={true}
           />
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
