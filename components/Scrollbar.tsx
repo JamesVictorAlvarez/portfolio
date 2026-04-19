@@ -7,7 +7,7 @@ export default function ScrollTracker() {
   const active = useScrollSpy({ ids: SECTIONS });
 
   return (
-    <div className="fixed right-5 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-40">
+    <div className="fixed right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-3 z-40">
       {SECTIONS.map((id) => (
         <a
           key={id}

@@ -25,7 +25,7 @@ export default function Nav() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none" data-animate="1">
+    <div className="fixed top-0 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none" data-animate="1">
       <motion.nav
         initial={{ opacity: 0 }}
         animate={{ opacity: mounted ? 1 : 0 }}
