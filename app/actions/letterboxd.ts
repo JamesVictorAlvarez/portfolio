@@ -1,6 +1,7 @@
 "use server";
 
 import Parser from "rss-parser";
+import { unstable_cache } from "next/cache";
 
 export type Movie = {
   title: string;
@@ -13,7 +14,7 @@ export type Movie = {
   timestamp?: number;
 };
 
-export async function getRecentMovies(username: string): Promise<Movie[]> {
+async function fetchRecentMovies(username: string): Promise<Movie[]> {
   try {
     const parser = new Parser({
       customFields: {
@@ -75,3 +76,9 @@ export async function getRecentMovies(username: string): Promise<Movie[]> {
     return [];
   }
 }
+
+export const getRecentMovies = unstable_cache(
+  async (username: string) => fetchRecentMovies(username),
+  ['letterboxd-movies'],
+  { revalidate: 3600 }
+);

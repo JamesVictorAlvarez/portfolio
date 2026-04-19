@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { getRecentMovies, type Movie } from "@/app/actions/letterboxd";
+import type { Movie } from "@/app/actions/letterboxd";
+import Image from "next/image";
 
 const songs = [
   "https://open.spotify.com/embed/track/5vPUv0xziXbV4lnWeVNXNq?utm_source=generator&theme=0",
@@ -11,19 +11,8 @@ const songs = [
   "https://open.spotify.com/embed/track/7AaCqnFCdfEKesBwSzS8NQ?utm_source=generator&theme=0",
 ];
 
-export default function Hobbies() {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [loadingMovies, setLoadingMovies] = useState(false);
-
-  useEffect(() => {
-    setLoadingMovies(true);
-    getRecentMovies("StepTesTed")
-      .then((data) => {
-        setMovies(data);
-        setLoadingMovies(false);
-      })
-      .catch(() => setLoadingMovies(false));
-  }, []);
+export default function Hobbies({ initialMovies }: { initialMovies: Movie[] }) {
+  const movies = initialMovies;
 
   return (
     <section id="hobbies" className="section container-narrow flex flex-col pt-12 overflow-hidden">
@@ -87,26 +76,7 @@ export default function Hobbies() {
       >
         <p className="label mb-5">Recently watched</p>
 
-        {loadingMovies ? (
-          <div className="flex gap-4 overflow-hidden">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="shrink-0 w-[120px] sm:w-[140px] animate-pulse">
-                <div
-                  className="aspect-[2/3] rounded-lg"
-                  style={{ background: "var(--border)" }}
-                />
-                <div
-                  className="h-3 rounded-sm mt-3"
-                  style={{ background: "var(--border)", width: "80%" }}
-                />
-                <div
-                  className="h-2 rounded-sm mt-1.5"
-                  style={{ background: "var(--border)", width: "50%" }}
-                />
-              </div>
-            ))}
-          </div>
-        ) : movies.length > 0 ? (
+        {movies.length > 0 ? (
           <div
             className="flex gap-4 sm:gap-5 overflow-x-auto pb-2 -mx-1 px-1"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -132,10 +102,12 @@ export default function Hobbies() {
                 {/* Poster */}
                 <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
                   {movie.posterUrl ? (
-                    <img
+                    <Image
                       src={movie.posterUrl}
                       alt={movie.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 640px) 120px, 140px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div

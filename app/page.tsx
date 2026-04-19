@@ -8,7 +8,11 @@ import Hobbies from "@/components/Hobbies";
 import OpeningAnimation from "@/components/OpeningAnimation";
 
 
-export default function Home() {
+import { getRecentMovies } from "@/app/actions/letterboxd";
+
+export default async function Home() {
+  const movies = await getRecentMovies("StepTesTed");
+
   return (
     <main>
       <OpeningAnimation />
@@ -17,7 +21,7 @@ export default function Home() {
       <Experience />
       <Hackathons />
       <Projects />
-      <Hobbies />
+      <Hobbies initialMovies={movies} />
       <Footer />
     </main>
   );
