@@ -74,7 +74,30 @@ export default function Hobbies({ initialMovies }: { initialMovies: Movie[] }) {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
       >
-        <p className="label mb-5">Recently watched</p>
+        <div className="flex items-center justify-between mb-5">
+          <p className="label mb-0">Recently watched</p>
+          <a
+            href="https://letterboxd.com/StepTesTed/"
+            target="_blank"
+            rel="noreferrer"
+            className="group flex items-center gap-1.5 text-[11px] uppercase tracking-widest font-medium transition-transform duration-150 active:scale-[0.97]"
+            style={{ color: "var(--text-muted)" }}
+          >
+            <span className="group-hover:text-[var(--accent)] transition-colors duration-200">
+              @StepTesTed
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 256 256"
+              fill="currentColor"
+              className="opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:text-[var(--accent)] group-hover:translate-x-[2px] group-hover:-translate-y-[2px]"
+            >
+              <path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"></path>
+            </svg>
+          </a>
+        </div>
 
         {movies.length > 0 ? (
           <div className="movies-scroll flex gap-4 sm:gap-5 overflow-x-auto pb-4 -mx-1 px-1 snap-x snap-mandatory">
@@ -114,7 +137,7 @@ export default function Hobbies({ initialMovies }: { initialMovies: Movie[] }) {
                   delay: index * 0.06,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="group shrink-0 w-[120px] sm:w-[140px] snap-start select-none"
+                className="group shrink-0 w-[120px] sm:w-[140px] snap-start select-none transition-transform duration-150 active:scale-[0.97]"
                 style={{ textDecoration: "none" }}
               >
                 {/* Poster */}
