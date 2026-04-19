@@ -77,16 +77,34 @@ export default function Hobbies({ initialMovies }: { initialMovies: Movie[] }) {
         <p className="label mb-5">Recently watched</p>
 
         {movies.length > 0 ? (
-          <div
-            className="flex gap-4 sm:gap-5 overflow-x-auto pb-2 -mx-1 px-1"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            <style>{`.movies-scroll::-webkit-scrollbar { display: none; }`}</style>
+          <div className="movies-scroll flex gap-4 sm:gap-5 overflow-x-auto pb-4 -mx-1 px-1 snap-x snap-mandatory">
+            <style>{`
+              .movies-scroll {
+                scrollbar-width: thin;
+                scrollbar-color: var(--border) transparent;
+              }
+              .movies-scroll::-webkit-scrollbar {
+                height: 6px;
+              }
+              .movies-scroll::-webkit-scrollbar-track {
+                background: transparent;
+              }
+              .movies-scroll::-webkit-scrollbar-thumb {
+                background-color: var(--border);
+                border-radius: 10px;
+              }
+              @media (hover: hover) {
+                .movies-scroll:hover::-webkit-scrollbar-thumb {
+                  background-color: var(--text-muted);
+                }
+              }
+            `}</style>
             {movies.map((movie, index) => (
               <motion.a
                 href={movie.link}
                 target="_blank"
                 rel="noreferrer"
+                draggable={false}
                 key={movie.id || index}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -96,7 +114,7 @@ export default function Hobbies({ initialMovies }: { initialMovies: Movie[] }) {
                   delay: index * 0.06,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="group shrink-0 w-[120px] sm:w-[140px]"
+                className="group shrink-0 w-[120px] sm:w-[140px] snap-start select-none"
                 style={{ textDecoration: "none" }}
               >
                 {/* Poster */}
@@ -106,8 +124,9 @@ export default function Hobbies({ initialMovies }: { initialMovies: Movie[] }) {
                       src={movie.posterUrl}
                       alt={movie.title}
                       fill
+                      draggable={false}
                       sizes="(max-width: 640px) 120px, 140px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
                     />
                   ) : (
                     <div
