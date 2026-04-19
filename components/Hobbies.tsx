@@ -47,7 +47,7 @@ export default function Hobbies() {
       >
         <p className="label mb-5">On repeat</p>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {songs.map((embed, i) => (
             <motion.div
               key={i}
