@@ -8,4 +8,9 @@ export default defineConfig({
     webAnalytics: { enabled: true }
   }),
   integrations: [tailwind()],
+  vite: {
+    css: {
+      postcss: {},
+    },
+  },
 });
