@@ -1,0 +1,67 @@
+---
+const SECTIONS = ["home", "experience", "hackathons", "projects", "hobbies"];
+---
+<div id="scrollbar-spy" class="fixed right-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-3 z-40">
+  {SECTIONS.map((id) => (
+    <a
+      href={`#${id}`}
+      data-section-link={id}
+      class="relative block w-[3px] h-10 rounded-full no-underline transition-all duration-300 bg-[var(--border)] hover:bg-[var(--text-muted)]"
+    >
+      <span class="sr-only">{id}</span>
+    </a>
+  ))}
+</div>
+
+<script>
+  const links = document.querySelectorAll("[data-section-link]");
+  const ids = Array.from(links).map(l => l.getAttribute("data-section-link") || "");
+
+  const updateActive = (activeId: string) => {
+    links.forEach((l) => {
+      const id = l.getAttribute("data-section-link");
+      if (id === activeId) {
+        l.className = "relative block w-[3px] h-10 rounded-full no-underline transition-all duration-300 bg-[var(--accent)] scale-110";
+      } else {
+        l.className = "relative block w-[3px] h-10 rounded-full no-underline transition-all duration-300 bg-[var(--border)] hover:bg-[var(--text-muted)]";
+      }
+    });
+  };
+
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+
+  if (sections.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible?.target?.id) {
+        updateActive(visible.target.id);
+      }
+    }, {
+      threshold: [0.15, 0.3, 0.45, 0.6],
+      rootMargin: "-15% 0px -45% 0px"
+    });
+
+    sections.forEach(s => observer.observe(s));
+
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight;
+      const threshold = 5;
+      if (document.body.scrollHeight - scrollPos < threshold) {
+        updateActive(ids[ids.length - 1]);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (ids.includes(hash)) {
+        updateActive(hash);
+      }
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    
+    handleHashChange();
+  }
+</script>
