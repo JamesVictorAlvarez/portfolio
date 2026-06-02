@@ -1,0 +1,138 @@
+---
+const items = [
+  {
+    role: "ConUHacks X",
+    org: "Concordia University",
+    period: "Feb 2026",
+    logo: "/conuhacks10.png",
+    points: [
+      "Engineered a custom web agent to autonomously drop out.",
+      "Integrated AI decision-making to allow the agent to dynamically interpret unclear user flows.",
+    ],
+  },
+  {
+    role: "GameJam UdeM",
+    org: "Université de Montréal",
+    period: "May 2025",
+    logo: "/UdeM_game.png",
+    points: [
+      "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences.",
+      "Built in Unity using C#, with each level presenting unique challenges.",
+    ],
+  },
+  {
+    role: "ConUHacks IX",
+    org: "Concordia University",
+    period: "Feb 2025",
+    logo: "/conuhacks9.png",
+    points: [
+      "Implemented a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics.",
+      "Developed a multiplayer architecture supporting both TCP and UDP sockets.",
+    ],
+  },
+  {
+    role: "JACHacks",
+    org: "John Abbott College",
+    period: "May 2024",
+    logo: "/jachacks.png",
+    points: [
+      "Winner of Valnet Mini Challenge.",
+      "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP models.",
+      "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites.",
+    ],
+  },
+  {
+    role: "GameJam DINGO",
+    org: "Vanier College",
+    period: "Jan 2024",
+    logo: "/dingo.png",
+    points: [
+      "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
+      "Implemented custom C# scripts for camera control, state management.",
+    ],
+  },
+];
+
+const isLeft = (i: number) => i % 2 === 0;
+---
+<section id="hackathons" class="section container-narrow">
+  <div class="mb-14 text-center" data-animate="15">
+    <p class="label mb-2">Events & Competitions</p>
+    <h2 class="h2">Hackathons</h2>
+  </div>
+
+  <div class="relative">
+    <!-- Center vertical line – visible on md+ -->
+    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border)]" />
+
+    <!-- Left-side line – visible on mobile only -->
+    <div class="block md:hidden absolute left-[11px] top-0 bottom-0 w-px bg-[var(--border)]" />
+
+    <div class="flex flex-col gap-12 md:gap-16">
+      {items.map((e, i) => {
+        const left = isLeft(i);
+
+        return (
+          <div class="relative md:grid md:grid-cols-2 md:gap-10">
+            <!-- Center dot (md+) -->
+            <span class="hidden md:block absolute left-1/2 top-3 w-3 h-3 -translate-x-1/2 rounded-full border-2 border-[var(--border)] bg-[var(--bg-main)] z-10 transition-colors duration-300" />
+
+            <!-- Mobile dot -->
+            <span class="block md:hidden absolute left-[6px] top-[6px] w-[11px] h-[11px] rounded-full border-2 border-[var(--border)] bg-[var(--bg-main)] z-10 transition-colors duration-300" />
+
+            <!-- Card content -->
+            <div
+              data-animate={String(16 + i)}
+              class={`group pl-8 md:pl-0 ${
+                left
+                  ? "md:pr-10 md:text-right md:col-start-1 md:row-start-1"
+                  : "md:pl-10 md:text-left md:col-start-2 md:row-start-1"
+              }`}
+            >
+              <!-- Period pill -->
+              <span class="inline-block text-[10px] uppercase tracking-widest font-semibold py-1 mb-3 text-[var(--accent)]">
+                {e.period}
+              </span>
+
+              <div class={`flex items-center gap-4 ${left ? "md:flex-row-reverse" : ""}`}>
+                <img
+                  src={e.logo}
+                  alt={`${e.role} logo`}
+                  class="w-11 h-11 rounded-lg object-contain shrink-0 opacity-80"
+                />
+                <div>
+                  <h3 class="text-lg font-semibold text-[var(--text-main)] leading-snug">
+                    {e.role}
+                  </h3>
+                  <p class="text-sm text-[var(--text-muted)] mt-0.5">
+                    {e.org}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-3 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
+                {e.points.map((pt) => (
+                  <p>{pt}</p>
+                ))}
+              </div>
+
+              <!-- Subtle hover accent bar -->
+              <div
+                class={`hidden md:block mt-4 h-[2px] w-12 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300 ${
+                  left ? "ml-auto" : "mr-auto"
+                }`}
+              />
+            </div>
+
+            <!-- Empty spacer column (md+) -->
+            <div
+              class={`hidden md:block ${
+                left ? "md:col-start-2" : "md:col-start-1"
+              } md:row-start-1`}
+            />
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

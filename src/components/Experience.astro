@@ -1,0 +1,66 @@
+---
+const items = [
+  {
+    role: "Full Stack Developer",
+    org: "Université de Montréal",
+    period: "Feb 2026 - Present",
+    logo: "/udem.png",
+    points: [
+      "Designed and built Elearning platform.",
+      "Managed task delegation as a team lead.",
+    ],
+  },
+  {
+    role: "Software Intern",
+    org: "MR Control Systems International",
+    period: "May – Aug 2024",
+    logo: "/mr_control_logo.jpg",
+    points: [
+      "Built IoT automation dashboards.",
+      "Integrated Sinolta data sources; improved ops efficiency.",
+    ],
+  },
+];
+---
+<section id="experience" class="section container-narrow">
+  <div class="mb-10" data-animate="7">
+    <p class="label mb-2">Background</p>
+    <h2 class="h2">Experience</h2>
+  </div>
+
+  <div class="flex flex-col space-y-10">
+    {items.map((e, i) => (
+      <div
+        data-animate={String(8 + i)}
+        class="relative group border-l-2 border-[var(--border)] pl-6 hover:border-[var(--accent)] transition-colors duration-300"
+      >
+        <span class="absolute -left-[5px] top-6 w-2 h-2 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300" />
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div class="w-11 h-11 relative overflow-hidden flex-shrink-0 rounded-full bg-[var(--bg-card)] border border-[var(--border)] flex items-center justify-center group-hover:border-[var(--accent)] transition-all duration-300">
+            {e.logo ? (
+              <img src={e.logo} alt={e.org} class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-300" />
+            ) : (
+              <span class="text-xs font-bold text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors">{e.org.split(" ").slice(0, 2).map(n => n[0]).join("")}</span>
+            )}
+          </div>
+          <div class="flex flex-col">
+            <h3 class="text-base font-semibold text-[var(--text-main)] leading-tight">
+              {e.role}
+            </h3>
+            <span class="text-sm text-[var(--text-muted)] mt-0.5">
+              {e.org}
+            </span>
+          </div>
+          <span class="muted ml-auto text-xs font-medium tabular-nums pl-4 pt-1">
+            {e.period}
+          </span>
+        </div>
+        <div class="mt-4 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
+          {e.points.map((pt) => (
+            <p class="text-[var(--text-muted)]">{pt}</p>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

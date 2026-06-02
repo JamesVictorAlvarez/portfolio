@@ -1,0 +1,79 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+const LINKS = [
+  { name: "about", href: "#home", id: "home" },
+  { name: "experience", href: "#experience", id: "experience" },
+  { name: "hackathons", href: "#hackathons", id: "hackathons" },
+  { name: "projects", href: "#projects", id: "projects" },
+  { name: "hobbies", href: "#hobbies", id: "hobbies" },
+];
+---
+<div id="main-nav" class="fixed top-0 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none" data-animate="1">
+  <nav class="flex items-center gap-1 mt-4 px-2 py-1.5 rounded-xl border border-transparent bg-[var(--bg-main)]/80 backdrop-blur-md pointer-events-auto">
+    <a href="#home" aria-label="Home" class="px-2 hover:scale-95 transition-transform flex items-center justify-center">
+      <Logo className="w-5 h-5" />
+    </a>
+
+    <div class="w-px h-4 bg-[var(--border)]/40 mx-1" />
+
+    {LINKS.map((l) => (
+      <a
+        href={l.href}
+        data-nav-item={l.id}
+        class="group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-muted)] hover:text-[var(--text-main)] no-underline"
+      >
+        {l.name}
+      </a>
+    ))}
+
+    <div class="w-px h-4 bg-[var(--border)]/40 mx-1" />
+    <ThemeToggle />
+  </nav>
+</div>
+
+<script>
+  const nav = document.getElementById("main-nav");
+  if (nav) {
+    const navLinks = nav.querySelectorAll("[data-nav-item]");
+    
+    navLinks.forEach((link) => {
+      const el = link as HTMLElement;
+      el.addEventListener("mousedown", () => el.style.transform = "scale(0.97)");
+      el.addEventListener("mouseup", () => el.style.transform = "scale(1)");
+      el.addEventListener("mouseleave", () => el.style.transform = "scale(1)");
+    });
+
+    const scrollbarLinks = document.querySelectorAll("[data-section-link]");
+    const scrollbarSpy = document.getElementById("scrollbar-spy");
+
+    const updateNavActive = () => {
+      let activeId = "";
+      scrollbarLinks.forEach((l) => {
+        if (l.classList.contains("bg-[var(--accent)]")) {
+          activeId = l.getAttribute("data-section-link") || "";
+        }
+      });
+      
+      navLinks.forEach((nl) => {
+        const id = nl.getAttribute("data-nav-item");
+        if (id === activeId) {
+          nl.className = "group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-main)] underline underline-offset-[6px] decoration-[var(--text-main)] decoration-1";
+        } else {
+          nl.className = "group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-muted)] hover:text-[var(--text-main)] no-underline";
+        }
+      });
+    };
+
+    const target = scrollbarSpy || document.body;
+    const observer = new MutationObserver(updateNavActive);
+    observer.observe(target, { 
+      subtree: true, 
+      attributes: true, 
+      attributeFilter: ["class"] 
+    });
+    
+    updateNavActive();
+  }
+</script>
