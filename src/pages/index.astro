@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Experience from '../components/Experience.astro';
+import Hackathons from '../components/Hackathons.astro';
+import Projects from '../components/Projects.astro';
+import Hobbies from '../components/Hobbies.astro';
+import Footer from '../components/Footer.astro';
+import OpeningAnimation from '../components/OpeningAnimation.astro';
+import CustomCursor from '../components/CustomCursor.astro';
+
+// Instruct Astro to pre-render this index page statically
+export const prerender = true;
+---
+
+<Layout>
+  <OpeningAnimation />
+  <CustomCursor />
+  <Nav />
+  <main>
+    <Hero />
+    <Experience />
+    <Hackathons />
+    <Projects />
+    <Hobbies />
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  // General scroll animations using IntersectionObserver to replace Framer Motion
+  const animatedElements = document.querySelectorAll("[data-animate]");
+  if (animatedElements.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const el = e.target as HTMLElement;
+          el.classList.add("visible");
+          observer.unobserve(el); // Fire animation only once
+        }
+      });
+    }, {
+      threshold: 0.05,
+      rootMargin: "0px 0px -5% 0px"
+    });
+
+    animatedElements.forEach((el) => {
+      // Prepare initial animation states
+      el.classList.add("scroll-trigger");
+      observer.observe(el);
+    });
+  }
+</script>
+
+<style is:global>
+  /* Styling rules for scroll triggered animations */
+  .scroll-trigger {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1), transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .scroll-trigger.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Handle specific staggering delay modifiers based on data-animate values */
+  [data-animate="1"] { transition-delay: 80ms; }
+  [data-animate="2"] { transition-delay: 150ms; }
+  [data-animate="3"] { transition-delay: 220ms; }
+  [data-animate="4"] { transition-delay: 290ms; }
+  [data-animate="5"] { transition-delay: 360ms; }
+  [data-animate="6"] { transition-delay: 430ms; }
+</style>
