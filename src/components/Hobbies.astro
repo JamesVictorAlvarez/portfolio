@@ -1,0 +1,95 @@
+---
+const songs = [
+  "https://open.spotify.com/embed/track/5vPUv0xziXbV4lnWeVNXNq?utm_source=generator&theme=0",
+  "https://open.spotify.com/embed/track/2F4KHedLtAn8gCvJdViqJQ?utm_source=generator&theme=0",
+  "https://open.spotify.com/embed/track/312z6PZ8wwREck8613PkJk?utm_source=generator&theme=0",
+  "https://open.spotify.com/embed/track/5e0b9LgOfi3aJSKXFcOWRe?utm_source=generator&theme=0",
+  "https://open.spotify.com/embed/track/7AaCqnFCdfEKesBwSzS8NQ?utm_source=generator&theme=0",
+];
+---
+<section id="hobbies" class="section container-narrow flex flex-col pt-12 overflow-hidden">
+  <div class="mb-10 animate-fade-in">
+    <p class="label mb-2">Downtime</p>
+    <h2 class="h2">Hobbies & Interests</h2>
+  </div>
+
+  <!-- Music -->
+  <div class="mb-14">
+    <p class="label mb-5">On repeat</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {songs.map((embed) => (
+        <div class="overflow-hidden rounded-lg">
+          <iframe
+            src={embed}
+            width="100%"
+            height="80"
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            style="display: block;"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Movies -->
+  <div>
+    <p class="label mb-5">Recent Watches</p>
+    <div id="movie-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+      <!-- Skeleton loaders -->
+      {[1, 2, 3, 4, 5, 6].map(() => (
+        <div class="animate-pulse flex flex-col gap-2">
+          <div class="bg-[var(--border)] rounded-md aspect-[2/3] w-full" />
+          <div class="h-4 bg-[var(--border)] rounded w-3/4" />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  async function loadMovies() {
+    const container = document.getElementById("movie-grid");
+    if (!container) return;
+
+    try {
+      const res = await fetch("/api/movies");
+      const movies = await res.json();
+      
+      if (!movies || movies.length === 0) {
+        container.innerHTML = `<p class="text-sm text-[var(--text-muted)] col-span-full">Failed to load movies.</p>`;
+        return;
+      }
+
+      container.innerHTML = movies.map((m: any) => `
+        <a
+          href="${m.link}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex flex-col gap-2 group no-underline text-[var(--text-main)] hover:text-[var(--accent)]"
+        >
+          <div class="relative aspect-[2/3] overflow-hidden rounded-lg border border-[var(--border)] group-hover:border-[var(--accent)] transition-all duration-300">
+            <img
+              src="${m.posterUrl}"
+              alt="${m.title}"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-semibold leading-tight line-clamp-1 group-hover:text-[var(--accent)] transition-colors">
+              ${m.title}
+            </span>
+            ${m.rating ? `<span class="text-[10px] text-[var(--accent-warn)] mt-0.5">${m.rating}</span>` : ''}
+          </div>
+        </a>
+      `).join("");
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = `<p class="text-sm text-[var(--text-muted)] col-span-full">Failed to load movies.</p>`;
+    }
+  }
+
+  loadMovies();
+</script>
