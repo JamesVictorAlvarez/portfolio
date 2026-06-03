@@ -70,11 +70,12 @@ const songs = [
   <!-- Modal Overlay -->
   <div
     id="watches-modal"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 outline-none"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title"
     aria-hidden="true"
+    tabindex="-1"
     inert
   >
     <!-- Backdrop -->
@@ -187,13 +188,15 @@ const songs = [
       `;
     }
 
+    let openedWithKeyboard = false;
+
     function handleEscape(e: KeyboardEvent) {
       if (e.key === "Escape") {
         closeModal();
       }
     }
 
-    function openModal() {
+    function openModal(e?: Event) {
       if (!modal || !modalContent) return;
       document.body.classList.add("overflow-hidden");
       modal.removeAttribute("inert");
@@ -203,9 +206,14 @@ const songs = [
       modalContent.classList.remove("scale-95", "opacity-0");
       modalContent.classList.add("scale-100", "opacity-100");
 
-      // Accessibility: Focus the close button inside modal
-      if (closeBtn) {
-        closeBtn.focus();
+      // Check if opened via keyboard (detail is 0 for keyboard triggers in UI events)
+      openedWithKeyboard = e ? (e as UIEvent).detail === 0 : false;
+
+      // Accessibility focus management
+      if (openedWithKeyboard) {
+        if (closeBtn) closeBtn.focus();
+      } else {
+        modal.focus();
       }
 
       // Dynamic Escape key listener
@@ -222,9 +230,11 @@ const songs = [
       modal.classList.remove("opacity-100", "pointer-events-auto");
       modal.classList.add("opacity-0", "pointer-events-none");
 
-      // Accessibility: Restore focus to trigger button
-      if (trigger) {
+      // Accessibility focus management
+      if (openedWithKeyboard && trigger) {
         trigger.focus();
+      } else if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
       }
 
       // Remove dynamic Escape key listener
@@ -232,7 +242,7 @@ const songs = [
     }
 
     // Set up click/keyboard interactions
-    if (trigger) trigger.addEventListener("click", openModal);
+    if (trigger) trigger.addEventListener("click", (e) => openModal(e));
     if (closeBtn) closeBtn.addEventListener("click", closeModal);
     if (backdrop) backdrop.addEventListener("click", closeModal);
 
