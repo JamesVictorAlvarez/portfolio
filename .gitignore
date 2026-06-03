@@ -47,3 +47,6 @@ skills-lock.json
 /dist/
 /.astro/
 
+# git worktrees
+.worktrees/
+

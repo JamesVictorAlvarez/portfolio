@@ -38,6 +38,17 @@
         </svg>
         <span>LinkedIn</span>
       </a>
+      <!-- SVG Portfolio Trigger Button -->
+      <button
+        id="portfolio-trigger"
+        type="button"
+        class="inline-flex items-center gap-2 text-sm no-underline text-[var(--text-muted)] hover:text-[var(--accent)] cursor-pointer bg-transparent border-0 p-0 font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+      >
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>Portfolio</span>
+      </button>
       <!-- SVG Email -->
       <a href="mailto:jamesvictoralvarez@gmail.com" class="inline-flex items-center gap-2 text-sm no-underline text-[var(--text-muted)] hover:text-[var(--accent)]">
         <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -59,3 +70,159 @@
     </div>
   </div>
 </section>
+
+<!-- Portfolio PDF Modal Overlay -->
+<div
+  id="portfolio-modal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300 outline-none"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="portfolio-modal-title"
+  aria-hidden="true"
+  tabindex="-1"
+  inert
+>
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-[#0a0c10]/75 backdrop-blur-sm" id="portfolio-backdrop"></div>
+  
+  <!-- Modal content card -->
+  <div
+    class="relative w-full max-w-4xl bg-[var(--bg-alt)]/90 backdrop-blur-md border border-[var(--border)] rounded-xl shadow-2xl flex flex-col h-[85vh] transform scale-95 opacity-0 transition-all duration-300 ease-out"
+    id="portfolio-modal-content"
+  >
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
+      <h3 id="portfolio-modal-title" class="text-sm font-semibold uppercase tracking-wider text-[var(--text-main)]">
+        My Portfolio
+      </h3>
+      
+      <div class="flex items-center gap-3">
+        <!-- Download Button -->
+        <a
+          href="/docs/james-alvarez-cv.pdf"
+          download="James-Alvarez-Portfolio.pdf"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--bg-main)] hover:text-[var(--bg-main)] transition-colors duration-200 cursor-pointer no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          aria-label="Download PDF"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </a>
+        
+        <!-- Close Button -->
+        <button
+          id="portfolio-modal-close"
+          type="button"
+          class="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--border)] transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          aria-label="Close modal"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body (PDF Viewer iframe) -->
+    <div class="flex-1 w-full h-full overflow-hidden bg-[var(--bg-main)] rounded-b-xl">
+      <iframe
+        src="/docs/james-alvarez-cv.pdf"
+        width="100%"
+        height="100%"
+        class="border-0 w-full h-full"
+        title="James Victor Alvarez Portfolio PDF"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initPortfolioModal() {
+    const trigger = document.getElementById("portfolio-trigger") as HTMLButtonElement | null;
+    const modal = document.getElementById("portfolio-modal");
+    const backdrop = document.getElementById("portfolio-backdrop");
+    const closeBtn = document.getElementById("portfolio-modal-close") as HTMLButtonElement | null;
+    const modalContent = document.getElementById("portfolio-modal-content");
+
+    if (!trigger || !modal || !modalContent) return;
+
+    let openedWithKeyboard = false;
+
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    }
+
+    function openModal(e?: Event) {
+      if (!modal || !modalContent) return;
+      document.body.classList.add("overflow-hidden");
+      modal.removeAttribute("inert");
+      modal.setAttribute("aria-hidden", "false");
+      modal.classList.remove("opacity-0", "pointer-events-none");
+      modal.classList.add("opacity-100", "pointer-events-auto");
+      modalContent.classList.remove("scale-95", "opacity-0");
+      modalContent.classList.add("scale-100", "opacity-100");
+
+      openedWithKeyboard = e ? (e as UIEvent).detail === 0 : false;
+
+      if (openedWithKeyboard) {
+        if (closeBtn) closeBtn.focus();
+      } else {
+        modal.focus();
+      }
+
+      window.addEventListener("keydown", handleEscape);
+    }
+
+    function closeModal() {
+      if (!modal || !modalContent) return;
+      document.body.classList.remove("overflow-hidden");
+      modal.setAttribute("inert", "");
+      modal.setAttribute("aria-hidden", "true");
+      modalContent.classList.remove("scale-100", "opacity-100");
+      modalContent.classList.add("scale-95", "opacity-0");
+      modal.classList.remove("opacity-100", "pointer-events-auto");
+      modal.classList.add("opacity-0", "pointer-events-none");
+
+      if (openedWithKeyboard && trigger) {
+        trigger.focus();
+      } else if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+
+      window.removeEventListener("keydown", handleEscape);
+    }
+
+    trigger.addEventListener("click", (e) => openModal(e));
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    if (backdrop) backdrop.addEventListener("click", closeModal);
+
+    // Focus Trapping
+    modal.addEventListener("keydown", (e) => {
+      if (e.key !== "Tab" || modal.getAttribute("aria-hidden") === "true") return;
+
+      const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+      const focusableContent = modal.querySelectorAll(focusableElements);
+      if (focusableContent.length === 0) return;
+
+      const firstFocusableElement = focusableContent[0] as HTMLElement;
+      const lastFocusableElement = focusableContent[focusableContent.length - 1] as HTMLElement;
+
+      if (e.shiftKey) { // Shift + Tab
+        if (document.activeElement === firstFocusableElement) {
+          lastFocusableElement.focus();
+          e.preventDefault();
+        }
+      } else { // Tab
+        if (document.activeElement === lastFocusableElement) {
+          firstFocusableElement.focus();
+          e.preventDefault();
+        }
+      }
+    });
+  }
+
+  initPortfolioModal();
+</script>
