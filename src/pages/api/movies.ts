@@ -48,8 +48,7 @@ export const GET: APIRoute = async () => {
 
     const filtered = movies
       .filter((m: any) => m.posterUrl)
-      .sort((a: any, b: any) => b.timestamp - a.timestamp)
-      .slice(0, 6);
+      .sort((a: any, b: any) => b.timestamp - a.timestamp);
 
     return new Response(JSON.stringify(filtered), {
       status: 200,
@@ -61,6 +60,11 @@ export const GET: APIRoute = async () => {
     });
   } catch (e) {
     console.error(e);
-    return new Response(JSON.stringify([]), { status: 500 });
+    return new Response(JSON.stringify([]), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 };
