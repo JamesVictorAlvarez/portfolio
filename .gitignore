@@ -50,3 +50,6 @@ skills-lock.json
 # git worktrees
 .worktrees/
 
+# local superpowers agent docs
+docs/superpowers/
+
