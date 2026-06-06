@@ -4,6 +4,8 @@
 <canvas id="bg-animation" class="fixed inset-0 -z-20 pointer-events-none w-full h-full block" aria-hidden="true"></canvas>
 
 <script>
+  const DEFAULT_ACCENT_COLOR = '#7b93d8';
+
   interface Wave {
     baseY: number; // base Y position as fraction of viewport height
     amplitude: number; // base amplitude in pixels
@@ -76,7 +78,7 @@
       let targetVelocity = 0;
       let lastScrollTime = performance.now();
 
-      window.addEventListener('scroll', () => {
+      function scrollHandler() {
         const currentScrollY = window.scrollY;
         const currentTime = performance.now();
         const timeDiff = currentTime - lastScrollTime;
@@ -92,14 +94,16 @@
         
         lastScrollY = currentScrollY;
         lastScrollTime = currentTime;
-      }, { passive: true });
+      }
+
+      window.addEventListener('scroll', scrollHandler, { passive: true });
 
       // Cache theme accent color dynamically to avoid layout thrashing in the animation loop
-      let accentColor = '#7b93d8';
+      let accentColor = DEFAULT_ACCENT_COLOR;
       function updateAccentColor() {
         const styles = getComputedStyle(document.documentElement);
         const accentColorRaw = styles.getPropertyValue('--accent').trim();
-        accentColor = accentColorRaw || '#7b93d8';
+        accentColor = accentColorRaw || DEFAULT_ACCENT_COLOR;
       }
       
       updateAccentColor();
@@ -124,15 +128,18 @@
         if (isReducedMotion || !canvas || !ctx) return;
         animationFrameId = requestAnimationFrame(loop);
 
-        const dt = time - lastTime;
+        const dt = Math.min(time - lastTime, 100);
         lastTime = time;
 
+        const dtRatio = dt / 16.67;
+
         // Fade target velocity back to 0
-        targetVelocity *= 0.95;
+        targetVelocity *= Math.pow(0.95, dtRatio);
         if (targetVelocity < 0.001) targetVelocity = 0;
 
         // Smoothly interpolate scroll velocity (lerp)
-        scrollVelocity += (targetVelocity - scrollVelocity) * 0.08;
+        const lerpFactor = 1 - Math.pow(1 - 0.08, dtRatio);
+        scrollVelocity += (targetVelocity - scrollVelocity) * lerpFactor;
 
         // Clear background
         ctx.clearRect(0, 0, width, height);
@@ -184,6 +191,14 @@
       if (!isReducedMotion) {
         loop(performance.now());
       }
+
+      // Cleanup event listeners and observers for Astro View Transitions
+      document.addEventListener('astro:before-swap', () => {
+        window.removeEventListener('resize', resize);
+        window.removeEventListener('scroll', scrollHandler);
+        themeObserver.disconnect();
+        cancelAnimationFrame(animationFrameId);
+      });
     }
   }
 </script>
