@@ -16,6 +16,24 @@ const {
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script is:inline>
+      (function() {
+        let saved = "dark";
+        try {
+          saved = localStorage.getItem("theme") || "dark";
+        } catch (e) {
+          // Ignore localStorage access errors (e.g. disabled cookies)
+        }
+        const themes = ["dark", "light", "dracula", "nord", "forest", "rosepine", "oceanic", "sepia"];
+        if (!themes.includes(saved)) {
+          saved = "dark";
+        }
+        themes.forEach(t => document.documentElement.classList.remove(`theme-${t}`));
+        if (saved !== "dark") {
+          document.documentElement.classList.add(`theme-${saved}`);
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
