@@ -6,7 +6,8 @@
 >
   <div class="flex-1 max-w-lg">
     <p class="label mb-4" data-animate="2">
-      Computer science · Concordia University
+      <span class="lang-en">Computer science · Concordia University</span>
+      <span class="lang-fr">Informatique · Université Concordia</span>
     </p>
     <h1
       class="text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
@@ -20,7 +21,8 @@
       style="max-width: 50ch;"
       data-animate="4"
     >
-      Currently studying CS and looking for opportunities to ship real products. I love working on side projects that involve AI and Web Development.
+      <span class="lang-en">Currently studying CS and looking for opportunities to ship real products. I love working on side projects that involve AI and Web Development.</span>
+      <span class="lang-fr">Étudie actuellement l'informatique et recherche des opportunités pour concevoir des produits réels. J'adore travailler sur des projets personnels impliquant l'IA et le développement Web.</span>
     </p>
 
     <div class="flex items-center gap-5" data-animate="5">
@@ -47,7 +49,8 @@
         <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <span>Portfolio</span>
+        <span class="lang-en">Portfolio</span>
+        <span class="lang-fr">Portfolio</span>
       </button>
       <!-- SVG Email -->
       <a href="mailto:jamesvictoralvarez@gmail.com" class="inline-flex items-center gap-2 text-sm no-underline text-[var(--text-muted)] hover:text-[var(--accent)]">
@@ -63,7 +66,7 @@
     <div class="relative w-56 h-56 md:w-72 md:h-72 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
       <img
         src="/me.jpg"
-        alt="James Victor Alvarez — portrait photo"
+        alt="James Victor Alvarez"
         class="w-full h-full object-cover"
         loading="eager"
       />
@@ -93,21 +96,25 @@
     <!-- Header -->
     <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
       <h3 id="portfolio-modal-title" class="text-sm font-semibold uppercase tracking-wider text-[var(--text-main)]">
-        My Portfolio
+        <span class="lang-en">My Portfolio</span>
+        <span class="lang-fr">Mon Portfolio</span>
       </h3>
       
       <div class="flex items-center gap-3">
         <!-- Download Button -->
         <a
+          id="portfolio-download-link"
           href="/docs/james-alvarez-cv.pdf"
           download="James-Alvarez-Portfolio.pdf"
           class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-[var(--bg-main)] hover:text-[var(--bg-main)] transition-colors duration-200 cursor-pointer no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-          aria-label="Download PDF"
+          data-aria-label-en="Download PDF"
+          data-aria-label-fr="Télécharger le PDF"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          Download
+          <span class="lang-en">Download</span>
+          <span class="lang-fr">Télécharger</span>
         </a>
         
         <!-- Close Button -->
@@ -115,7 +122,8 @@
           id="portfolio-modal-close"
           type="button"
           class="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--border)] transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-          aria-label="Close modal"
+          data-aria-label-en="Close modal"
+          data-aria-label-fr="Fermer la boîte de dialogue"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
@@ -132,6 +140,8 @@
         height="100%"
         class="border-0 w-full h-full"
         title="James Victor Alvarez Portfolio PDF"
+        data-title-en="James Victor Alvarez Portfolio PDF"
+        data-title-fr="Portfolio PDF de James Victor Alvarez"
       ></iframe>
     </div>
   </div>
@@ -225,4 +235,29 @@
   }
 
   initPortfolioModal();
+</script>
+
+<script>
+  const iframe = document.querySelector("#portfolio-modal iframe") as HTMLIFrameElement | null;
+  const downloadLink = document.getElementById("portfolio-download-link");
+  const closeBtn = document.getElementById("portfolio-modal-close");
+
+  if (iframe) {
+    const updateLabels = () => {
+      const lang = document.documentElement.getAttribute("lang") || "en";
+      const titleVal = iframe.getAttribute(`data-title-${lang}`);
+      if (titleVal) iframe.title = titleVal;
+      
+      if (downloadLink) {
+        const dlAria = downloadLink.getAttribute(`data-aria-label-${lang}`);
+        if (dlAria) downloadLink.setAttribute("aria-label", dlAria);
+      }
+      if (closeBtn) {
+        const closeAria = closeBtn.getAttribute(`data-aria-label-${lang}`);
+        if (closeAria) closeBtn.setAttribute("aria-label", closeAria);
+      }
+    };
+    window.addEventListener("lang-change", updateLabels);
+    updateLabels();
+  }
 </script>
