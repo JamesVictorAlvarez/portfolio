@@ -1,7 +1,6 @@
 ---
 import '../styles/globals.css';
 import Scrollbar from '../components/Scrollbar.astro';
-import BackgroundAnimation from '../components/BackgroundAnimation.astro';
 
 interface Props {
   title?: string;
@@ -32,8 +31,7 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
   </head>
-  <body class="relative text-[var(--text-main)] overflow-x-hidden">
-    <BackgroundAnimation />
+  <body class="relative bg-[var(--bg-main)] text-[var(--text-main)] overflow-x-hidden">
     <div class="fixed inset-0 -z-10 pointer-events-none bg-dither" />
     <slot />
     <Scrollbar />
