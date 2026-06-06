@@ -255,15 +255,15 @@
 
 ### Task 3: Visual & Accessibility Verification
 
-- [ ] **Step 1: Check dynamic theme updates**
+- [x] **Step 1: Check dynamic theme updates**
   Launch dev server: `npm run dev`
   Verify that when you switch from dark mode to light mode (and vice versa) using the site's theme toggle, the canvas wave colors dynamically update to use the light/dark mode `--accent` value.
 
-- [ ] **Step 2: Check scroll reactivity**
+- [x] **Step 2: Check scroll reactivity**
   While running `npm run dev`, scroll down and up the page. Verify that the waves accelerate smoothly, swell slightly in height, and decelerate back to their default slow motion over ~0.5 seconds when scrolling stops.
 
-- [ ] **Step 3: Check responsiveness**
+- [x] **Step 3: Check responsiveness**
   Resize the browser window and verify that the canvas expands/shrinks to cover the full width/height without pixelation or stretching.
 
-- [ ] **Step 4: Check prefers-reduced-motion compatibility**
+- [x] **Step 4: Check prefers-reduced-motion compatibility**
   Set `isReducedMotion` mock to `true` temporarily in the script, or trigger the setting in system preferences, and verify that the animation stops drawing immediately.
