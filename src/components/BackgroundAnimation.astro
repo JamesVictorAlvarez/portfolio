@@ -14,7 +14,7 @@
   }
 
   const DEFAULT_ACCENT_COLOR = '#7b93d8';
-  const PARTICLES_COUNT = 800;
+  const PARTICLES_COUNT = 600;
   const ATTR_A = 1.4; // Halvorsen constant parameter
 
   function initBackgroundAnimation() {
@@ -145,7 +145,7 @@
 
       // Physics step calculation: higher velocity increases physics speed
       // Base dt is 0.0035, scroll swells it up to ~0.04
-      const simDt = 0.0035 + scrollVelocity * 0.04;
+      const simDt = (0.0035 + scrollVelocity * 0.04) * dtRatio;
 
       // Slow camera rotation + scroll mapping
       angleY += 0.001 * dtRatio + scrollVelocity * 0.05;
@@ -204,7 +204,7 @@
         const size = Math.max((fov / (fov + z2)) * 1.5, 0.4);
         
         // Front particles are opaque (~0.12), back are very faint (~0.02)
-        const zAlpha = (z2 + 15) / 30; // normalized 0 to 1
+        const zAlpha = (15 - z2) / 30; // normalized 0 to 1, where smaller z2 (closer) is more opaque
         const alpha = Math.max(Math.min(zAlpha, 1), 0) * 0.12;
 
         // 4. Render Trails
@@ -233,16 +233,19 @@
       ctx.globalAlpha = 1.0; // Reset
     }
 
-    mediaQuery.addEventListener('change', (e) => {
+    function handleMotionChange(e: MediaQueryListEvent) {
       isReducedMotion = e.matches;
       if (isReducedMotion) {
         cancelAnimationFrame(animationFrameId);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (canvas && ctx) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
       } else {
         lastTime = performance.now();
         loop(lastTime);
       }
-    });
+    }
+    mediaQuery.addEventListener('change', handleMotionChange);
 
     if (!isReducedMotion) {
       loop(performance.now());
@@ -251,6 +254,7 @@
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', scrollHandler);
+      mediaQuery.removeEventListener('change', handleMotionChange);
       themeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
       if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
