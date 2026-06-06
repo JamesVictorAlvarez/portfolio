@@ -17,6 +17,7 @@
   }
 
   let cleanup: (() => void) | undefined;
+  let isInitialPageLoad = true;
 
   function initBackgroundAnimation() {
     const canvas = document.getElementById('bg-animation') as HTMLCanvasElement | null;
@@ -31,6 +32,7 @@
     // Track window dimensions with devicePixelRatio
     let width = 0;
     let height = 0;
+    let resizeTimeout = 0;
     
     function resize() {
       if (!canvas || !ctx) return;
@@ -42,8 +44,13 @@
       ctx.scale(dpr, dpr);
     }
     
+    function handleResize() {
+      if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
+      resizeTimeout = requestAnimationFrame(resize);
+    }
+    
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', handleResize);
 
     // Initialize waves configuration
     const waves: Wave[] = [
@@ -199,15 +206,21 @@
 
     // Return cleanup function
     return () => {
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', scrollHandler);
       mediaQuery.removeEventListener('change', handleMotionChange);
       themeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
+      if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
     };
   }
 
   document.addEventListener('astro:page-load', () => {
+    if (isInitialPageLoad && cleanup) {
+      isInitialPageLoad = false;
+      return;
+    }
+    isInitialPageLoad = false;
     if (cleanup) cleanup();
     cleanup = initBackgroundAnimation();
   });
