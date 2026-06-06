@@ -1,13 +1,14 @@
 ---
 import Logo from './Logo.astro';
-import ThemeToggle from './ThemeToggle.astro';
+import ThemeSelector from './ThemeSelector.astro';
+import LanguageToggle from './LanguageToggle.astro';
 
 const LINKS = [
-  { name: "about", href: "#home", id: "home" },
-  { name: "experience", href: "#experience", id: "experience" },
-  { name: "hackathons", href: "#hackathons", id: "hackathons" },
-  { name: "projects", href: "#projects", id: "projects" },
-  { name: "hobbies", href: "#hobbies", id: "hobbies" },
+  { nameEn: "about", nameFr: "à propos", href: "#home", id: "home" },
+  { nameEn: "experience", nameFr: "expérience", href: "#experience", id: "experience" },
+  { nameEn: "hackathons", nameFr: "hackathons", href: "#hackathons", id: "hackathons" },
+  { nameEn: "projects", nameFr: "projets", href: "#projects", id: "projects" },
+  { nameEn: "hobbies", nameFr: "loisirs", href: "#hobbies", id: "hobbies" },
 ];
 ---
 <div id="main-nav" class="fixed top-0 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none" data-animate="1">
@@ -22,14 +23,17 @@ const LINKS = [
       <a
         href={l.href}
         data-nav-item={l.id}
-        class="group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-muted)] hover:text-[var(--text-main)] no-underline"
+        class="group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-muted)] hover:text-[var(--text-main)] no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg"
       >
-        {l.name}
+        <span class="lang-en">{l.nameEn}</span>
+        <span class="lang-fr">{l.nameFr}</span>
       </a>
     ))}
 
     <div class="w-px h-4 bg-[var(--border)]/40 mx-1" />
-    <ThemeToggle />
+    <ThemeSelector />
+    <div class="w-px h-4 bg-[var(--border)]/40 mx-1" />
+    <LanguageToggle />
   </nav>
 </div>
 
@@ -59,9 +63,9 @@ const LINKS = [
       navLinks.forEach((nl) => {
         const id = nl.getAttribute("data-nav-item");
         if (id === activeId) {
-          nl.className = "group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-main)] underline underline-offset-[6px] decoration-[var(--text-main)] decoration-1";
+          nl.className = "group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-main)] underline underline-offset-[6px] decoration-[var(--text-main)] decoration-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg";
         } else {
-          nl.className = "group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-muted)] hover:text-[var(--text-main)] no-underline";
+          nl.className = "group relative px-3.5 py-1.5 text-[13px] tracking-wide select-none transition-transform duration-200 text-[var(--text-muted)] hover:text-[var(--text-main)] no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded-lg";
         }
       });
     };

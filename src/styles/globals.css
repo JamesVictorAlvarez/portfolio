@@ -27,8 +27,8 @@ body {
   --accent-error: #c7616f;
 }
 
-/* ── Light mode ── */
-html.light {
+/* ── Minimal Light Theme ── */
+html.theme-light {
   --bg-main: #f3f4f8;
   --bg-alt: #e8eaf0;
   --text-main: #2a2d35;
@@ -38,6 +38,84 @@ html.light {
   --border: #d0d4dc;
   --accent-warn: #b8923a;
   --accent-error: #b5505e;
+}
+
+/* ── Dracula Cyberpunk Theme ── */
+html.theme-dracula {
+  --bg-main: #1e1f29;
+  --bg-alt: #282a36;
+  --text-main: #f8f8f2;
+  --text-muted: #6272a4;
+  --accent: #bd93f9;
+  --accent-hover: #ff79c6;
+  --border: #44475a;
+  --accent-warn: #f1fa8c;
+  --accent-error: #ff5555;
+}
+
+/* ── Nord Arctic Theme ── */
+html.theme-nord {
+  --bg-main: #2e3440;
+  --bg-alt: #3b4252;
+  --text-main: #eceff4;
+  --text-muted: #d8dee9;
+  --accent: #88c0d0;
+  --accent-hover: #8fbcbb;
+  --border: #4c566a;
+  --accent-warn: #ebcb8b;
+  --accent-error: #bf616a;
+}
+
+/* ── Earthy Forest Theme ── */
+html.theme-forest {
+  --bg-main: #141c15;
+  --bg-alt: #1a261c;
+  --text-main: #d0dcd0;
+  --text-muted: #788a78;
+  --accent: #88b088;
+  --accent-hover: #a3c9a3;
+  --border: #2b3d2e;
+  --accent-warn: #dcb878;
+  --accent-error: #c47878;
+}
+
+/* ── Rose Pine Theme ── */
+html.theme-rosepine {
+  --bg-main: #191724;
+  --bg-alt: #1f1d2e;
+  --text-main: #e0def4;
+  --text-muted: #908caa;
+  --accent: #c4a7e7;
+  --accent-hover: #ebbcba;
+  --border: #26233a;
+  --accent-warn: #f6c177;
+  --accent-error: #eb6f92;
+}
+
+/* ── Deep Oceanic Theme ── */
+html.theme-oceanic {
+  --bg-main: #0b131a;
+  --bg-alt: #121e2a;
+  --text-main: #d1e2f0;
+  --text-muted: #5c7c99;
+  --accent: #00b4d8;
+  --accent-hover: #90e0ef;
+  --border: #1d354e;
+  --accent-warn: #ffd166;
+  --accent-error: #ef476f;
+}
+
+/* ── Sepia Retro Theme ── */
+html.theme-sepia {
+  --bg-main: #f4eed8;
+  --bg-alt: #eae1c4;
+  --text-main: #433422;
+  --text-muted: #7e6e5a;
+  --accent: #a0522d;
+  --accent-hover: #cd853f;
+  --border: #d3c7a8;
+  --accent-warn: #b8860b;
+  --accent-error: #8b0000;
 }
 
 body {
@@ -177,8 +255,9 @@ section[id] {
   opacity: 0.5;
 }
 
-/* ── Grain / dither overlay (light mode) ── */
-html.light .bg-dither {
+/* ── Grain / dither overlay (light modes) ── */
+html.theme-light .bg-dither,
+html.theme-sepia .bg-dither {
   background-image:
     linear-gradient(125deg, rgba(5, 5, 5, 0.05) 0%, rgba(0, 0, 0, 0.015) 100%),
     linear-gradient(45deg, rgba(5, 5, 5, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
@@ -310,3 +389,12 @@ select {
     animation: none !important;
   }
 }
+
+/* ── Language Switcher Visibility ── */
+html:not([lang="en"]) .lang-en {
+  display: none !important;
+}
+html:not([lang="fr"]) .lang-fr {
+  display: none !important;
+}
+

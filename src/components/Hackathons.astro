@@ -3,69 +3,103 @@ const items = [
   {
     role: "ConUHacks X",
     org: "Concordia University",
-    period: "Feb 2026",
+    period: { en: "Feb 2026", fr: "Fév 2026" },
     logo: "/conuhacks10.png",
-    points: [
-      "Engineered a custom web agent to autonomously drop out.",
-      "Integrated AI decision-making to allow the agent to dynamically interpret unclear user flows.",
-    ],
+    points: {
+      en: [
+        "Engineered a custom web agent to autonomously drop out.",
+        "Integrated AI decision-making to allow the agent to dynamically interpret unclear user flows."
+      ],
+      fr: [
+        "Conçu un agent web personnalisé pour abandonner de manière autonome.",
+        "Intégré une prise de décision par IA permettant à l'agent d'interpréter dynamiquement des flux d'utilisateurs ambigus."
+      ]
+    }
   },
   {
     role: "GameJam UdeM",
     org: "Université de Montréal",
-    period: "May 2025",
+    period: { en: "May 2025", fr: "Mai 2025" },
     logo: "/UdeM_game.png",
-    points: [
-      "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences.",
-      "Built in Unity using C#, with each level presenting unique challenges.",
-    ],
+    points: {
+      en: [
+        "Designed and developed an educational 3D game that helps teachers understand how students feel and learn through interactive level-based experiences.",
+        "Built in Unity using C#, with each level presenting unique challenges."
+      ],
+      fr: [
+        "Conçu et développé un jeu éducatif en 3D qui aide les enseignants à comprendre comment les élèves se sentent et apprennent à travers des expériences interactives par niveaux.",
+        "Conçu avec Unity en C#, chaque niveau présentant des défis uniques."
+      ]
+    }
   },
   {
     role: "ConUHacks IX",
     org: "Concordia University",
-    period: "Feb 2025",
+    period: { en: "Feb 2025", fr: "Fév 2025" },
     logo: "/conuhacks9.png",
-    points: [
-      "Implemented a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics.",
-      "Developed a multiplayer architecture supporting both TCP and UDP sockets.",
-    ],
+    points: {
+      en: [
+        "Implemented a first-person ray-casting engine from scratch in C++ using SDL2 for rendering and real-time graphics.",
+        "Developed a multiplayer architecture supporting both TCP and UDP sockets."
+      ],
+      fr: [
+        "Implémenté à partir de zéro un moteur de ray-casting à la première personne en C++ avec SDL2 pour le rendu et les graphismes en temps réel.",
+        "Développé une architecture multijoueur prenant en charge les sockets TCP et UDP."
+      ]
+    }
   },
   {
     role: "JACHacks",
     org: "John Abbott College",
-    period: "May 2024",
+    period: { en: "May 2024", fr: "Mai 2024" },
     logo: "/jachacks.png",
-    points: [
-      "Winner of Valnet Mini Challenge.",
-      "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP models.",
-      "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites.",
-    ],
+    points: {
+      en: [
+        "Winner of Valnet Mini Challenge.",
+        "Built an AI-driven web-scraping system to measure news timeliness and implemented keyword extraction using NLP models.",
+        "Automated data extraction from Excel sheets, GameRant articles, and Twitter posts, handling rate limits and structural differences across websites."
+      ],
+      fr: [
+        "Gagnant du mini-défi Valnet.",
+        "Conçu un système de web-scraping alimenté par l'IA pour mesurer la fraîcheur de l'actualité et implémenté l'extraction de mots-clés à l'aide de modèles NLP.",
+        "Automatisé l'extraction de données à partir de feuilles Excel, d'articles de GameRant et de publications Twitter, en gérant les limites de requêtes et les différences de structure des sites."
+      ]
+    }
   },
   {
     role: "GameJam DINGO",
     org: "Vanier College",
-    period: "Jan 2024",
+    period: { en: "Jan 2024", fr: "Jan 2024" },
     logo: "/dingo.png",
-    points: [
-      "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
-      "Implemented custom C# scripts for camera control, state management.",
-    ],
-  },
+    points: {
+      en: [
+        "Developed a 2D platformer in Unity where players use magic abilities that dynamically alter parkour mechanics and character effects.",
+        "Implemented custom C# scripts for camera control, state management."
+      ],
+      fr: [
+        "Développé un jeu de plateforme 2D avec Unity où les joueurs utilisent des capacités magiques modifiant dynamiquement les mécaniques de parkour et les effets du personnage.",
+        "Implémenté des scripts C# personnalisés pour le contrôle de la caméra et la gestion d'état."
+      ]
+    }
+  }
 ];
 
 const isLeft = (i: number) => i % 2 === 0;
 ---
 <section id="hackathons" class="section container-narrow">
   <div class="mb-14 text-center" data-animate="15">
-    <p class="label mb-2">Events & Competitions</p>
-    <h2 class="h2">Hackathons</h2>
+    <p class="label mb-2">
+      <span class="lang-en">Events & Competitions</span>
+      <span class="lang-fr">Événements & Compétitions</span>
+    </p>
+    <h2 class="h2">
+      <span class="lang-en">Hackathons</span>
+      <span class="lang-fr">Hackathons</span>
+    </h2>
   </div>
 
   <div class="relative">
-    <!-- Center vertical line – visible on md+ -->
     <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border)]" />
-
-    <!-- Left-side line – visible on mobile only -->
     <div class="block md:hidden absolute left-[11px] top-0 bottom-0 w-px bg-[var(--border)]" />
 
     <div class="flex flex-col gap-12 md:gap-16">
@@ -74,13 +108,9 @@ const isLeft = (i: number) => i % 2 === 0;
 
         return (
           <div class="relative md:grid md:grid-cols-2 md:gap-10">
-            <!-- Center dot (md+) -->
             <span class="hidden md:block absolute left-1/2 top-3 w-3 h-3 -translate-x-1/2 rounded-full border-2 border-[var(--border)] bg-[var(--bg-main)] z-10 transition-colors duration-300" />
-
-            <!-- Mobile dot -->
             <span class="block md:hidden absolute left-[6px] top-[6px] w-[11px] h-[11px] rounded-full border-2 border-[var(--border)] bg-[var(--bg-main)] z-10 transition-colors duration-300" />
 
-            <!-- Card content -->
             <div
               data-animate={String(16 + i)}
               class={`group pl-8 md:pl-0 ${
@@ -89,9 +119,9 @@ const isLeft = (i: number) => i % 2 === 0;
                   : "md:pl-10 md:text-left md:col-start-2 md:row-start-1"
               }`}
             >
-              <!-- Period pill -->
               <span class="inline-block text-[10px] uppercase tracking-widest font-semibold py-1 mb-3 text-[var(--accent)]">
-                {e.period}
+                <span class="lang-en">{e.period.en}</span>
+                <span class="lang-fr">{e.period.fr}</span>
               </span>
 
               <div class={`flex items-center gap-4 ${left ? "md:flex-row-reverse" : ""}`}>
@@ -110,13 +140,15 @@ const isLeft = (i: number) => i % 2 === 0;
                 </div>
               </div>
 
-              <div class="mt-3 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
-                {e.points.map((pt) => (
-                  <p>{pt}</p>
-                ))}
+              <div class="mt-3 flex flex-col text-sm leading-relaxed">
+                <div class="lang-en flex flex-col space-y-2 text-[var(--text-muted)]">
+                  {e.points.en.map((pt) => <p>{pt}</p>)}
+                </div>
+                <div class="lang-fr flex flex-col space-y-2 text-[var(--text-muted)]">
+                  {e.points.fr.map((pt) => <p>{pt}</p>)}
+                </div>
               </div>
 
-              <!-- Subtle hover accent bar -->
               <div
                 class={`hidden md:block mt-4 h-[2px] w-12 rounded-full bg-[var(--border)] group-hover:bg-[var(--accent)] transition-colors duration-300 ${
                   left ? "ml-auto" : "mr-auto"
@@ -124,7 +156,6 @@ const isLeft = (i: number) => i % 2 === 0;
               />
             </div>
 
-            <!-- Empty spacer column (md+) -->
             <div
               class={`hidden md:block ${
                 left ? "md:col-start-2" : "md:col-start-1"

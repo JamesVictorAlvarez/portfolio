@@ -1,31 +1,49 @@
 ---
 const items = [
   {
-    role: "Full Stack Developer",
+    role: { en: "Full Stack Developer", fr: "Développeur Full Stack" },
     org: "Université de Montréal",
-    period: "Feb 2026 - Present",
+    period: { en: "Feb 2026 - Present", fr: "Fév 2026 - Présent" },
     logo: "/udem.png",
-    points: [
-      "Designed and built Elearning platform.",
-      "Managed task delegation as a team lead.",
-    ],
+    points: {
+      en: [
+        "Designed and built Elearning platform.",
+        "Managed task delegation as a team lead."
+      ],
+      fr: [
+        "Conçu et développé une plateforme d'apprentissage en ligne (E-learning).",
+        "Géré la délégation des tâches en tant que chef d'équipe."
+      ]
+    }
   },
   {
-    role: "Software Intern",
+    role: { en: "Software Intern", fr: "Stagiaire Logiciel" },
     org: "MR Control Systems International",
-    period: "May – Aug 2024",
+    period: { en: "May – Aug 2024", fr: "Mai – Août 2024" },
     logo: "/mr_control_logo.jpg",
-    points: [
-      "Built IoT automation dashboards.",
-      "Integrated Sinolta data sources; improved ops efficiency.",
-    ],
-  },
+    points: {
+      en: [
+        "Built IoT automation dashboards.",
+        "Integrated Sinolta data sources; improved ops efficiency."
+      ],
+      fr: [
+        "Conçu des tableaux de bord d'automatisation IoT.",
+        "Intégré des sources de données Sinolta ; amélioré l'efficacité opérationnelle."
+      ]
+    }
+  }
 ];
 ---
 <section id="experience" class="section container-narrow">
   <div class="mb-10" data-animate="7">
-    <p class="label mb-2">Background</p>
-    <h2 class="h2">Experience</h2>
+    <p class="label mb-2">
+      <span class="lang-en">Background</span>
+      <span class="lang-fr">Parcours</span>
+    </p>
+    <h2 class="h2">
+      <span class="lang-en">Experience</span>
+      <span class="lang-fr">Expérience</span>
+    </h2>
   </div>
 
   <div class="flex flex-col space-y-10">
@@ -45,20 +63,26 @@ const items = [
           </div>
           <div class="flex flex-col">
             <h3 class="text-base font-semibold text-[var(--text-main)] leading-tight">
-              {e.role}
+              <span class="lang-en">{e.role.en}</span>
+              <span class="lang-fr">{e.role.fr}</span>
             </h3>
             <span class="text-sm text-[var(--text-muted)] mt-0.5">
               {e.org}
             </span>
           </div>
           <span class="muted ml-auto text-xs font-medium tabular-nums pl-4 pt-1">
-            {e.period}
+            <span class="lang-en">{e.period.en}</span>
+            <span class="lang-fr">{e.period.fr}</span>
           </span>
         </div>
-        <div class="mt-4 flex flex-col space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
-          {e.points.map((pt) => (
-            <p class="text-[var(--text-muted)]">{pt}</p>
-          ))}
+        
+        <div class="mt-4 flex flex-col text-sm leading-relaxed">
+          <div class="lang-en flex flex-col space-y-2 text-[var(--text-muted)]">
+            {e.points.en.map((pt) => <p>{pt}</p>)}
+          </div>
+          <div class="lang-fr flex flex-col space-y-2 text-[var(--text-muted)]">
+            {e.points.fr.map((pt) => <p>{pt}</p>)}
+          </div>
         </div>
       </div>
     ))}
