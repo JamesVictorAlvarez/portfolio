@@ -1,269 +1,336 @@
-# Background Silk Ribbon Animation Implementation Plan
+# Background Halvorsen Attractor Particle Swarm Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Create a subtle, high-performance HTML5 canvas background ribbon animation that reacts to user scroll velocity and adapts dynamically to dark/light mode themes.
+**Goal:** Replace the subtle background waves with a highly unique, modern 3D Halvorsen strange attractor particle swarm that reacts to page scroll position and scroll velocity.
 
-**Architecture:** A new standalone Astro component (`BackgroundAnimation.astro`) containing a canvas and native JavaScript `requestAnimationFrame` loop. The component will be included in the base HTML structure of the site via `Layout.astro`.
+**Architecture:** Rewrite the `<script>` contents of `src/components/BackgroundAnimation.astro`. The integration in `src/layouts/Layout.astro` remains unchanged.
 
-**Tech Stack:** Astro, Vanilla HTML5 Canvas 2D API, TypeScript.
+**Tech Stack:** Astro, HTML5 Canvas 2D API, TypeScript.
 
 ---
 
-### Task 1: Create the BackgroundAnimation Astro Component
+### Task 1: Rewrite BackgroundAnimation component
 
 **Files:**
-- Create: `src/components/BackgroundAnimation.astro`
+- Modify: `src/components/BackgroundAnimation.astro`
 
-- [x] **Step 1: Write the component markup and script**
-  Create the component with a canvas element and a script that handles high-DPI scaling, multi-frequency sine wave calculations, lerped scroll velocity tracking, theme-color detection, and reduced-motion compliance.
+- [ ] **Step 1: Rewrite BackgroundAnimation component logic**
+  Replace the contents of `src/components/BackgroundAnimation.astro` with the new 3D Halvorsen Attractor particle swarm logic, complete with dynamic coordinate updates, 3D rotations, perspective projection, depth-based sizing, and tail histories.
 
-  Create `src/components/BackgroundAnimation.astro` with the following content:
+  Overwrite `src/components/BackgroundAnimation.astro` with the following code:
   ```html
   ---
-  // BackgroundAnimation.astro - Subtle floating silk ribbons
+  // BackgroundAnimation.astro - Subtle floating 3D strange attractor swarm
   ---
   <canvas id="bg-animation" class="fixed inset-0 -z-20 pointer-events-none w-full h-full block" aria-hidden="true"></canvas>
 
   <script>
-    interface Wave {
-      baseY: number; // base Y position as fraction of viewport height
-      amplitude: number; // base amplitude in pixels
-      frequency: number; // spatial wavelength frequency
-      speed: number; // idle phase change speed
-      phase: number; // current phase offset
-      colorOpacity: number; // lines alpha opacity
-      lineWidth: number; // thickness in pixels
+    // Setup requestAnimationFrame loop for Halvorsen Attractor particle swarm
+    interface Particle {
+      x: number;
+      y: number;
+      z: number;
+      // History array for drawing tails: stores 5 past projected screen coordinates
+      history: { x: number; y: number; size: number; alpha: number }[];
     }
 
-    const canvas = document.getElementById('bg-animation') as HTMLCanvasElement | null;
-    if (canvas) {
+    const DEFAULT_ACCENT_COLOR = '#7b93d8';
+    const PARTICLES_COUNT = 800;
+    const ATTR_A = 1.4; // Halvorsen constant parameter
+
+    function initBackgroundAnimation() {
+      const canvas = document.getElementById('bg-animation') as HTMLCanvasElement | null;
+      if (!canvas) return;
+
       const ctx = canvas.getContext('2d');
-      if (ctx) {
-        // Track prefers-reduced-motion
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        let isReducedMotion = mediaQuery.matches;
+      if (!ctx) return;
 
-        // Track window dimensions with devicePixelRatio
-        let width = 0;
-        let height = 0;
+      // Track prefers-reduced-motion
+      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let isReducedMotion = mediaQuery.matches;
+
+      // Track window dimensions with devicePixelRatio
+      let width = 0;
+      let height = 0;
+      let scale = 0;
+      let lastWidth = window.innerWidth;
+      let lastHeight = window.innerHeight;
+
+      function resize() {
+        if (!canvas || !ctx) return;
+        const newWidth = window.innerWidth;
+        const newHeight = window.innerHeight;
         
-        function resize() {
-          if (!canvas || !ctx) return;
-          const dpr = window.devicePixelRatio || 1;
-          width = window.innerWidth;
-          height = window.innerHeight;
-          canvas.width = width * dpr;
-          canvas.height = height * dpr;
-          ctx.scale(dpr, dpr);
-        }
+        // Prevent layout shifts on mobile scroll (due to url bar popping up)
+        if (newWidth === lastWidth && Math.abs(newHeight - lastHeight) < 80) return;
         
-        resize();
-        window.addEventListener('resize', resize);
+        lastWidth = newWidth;
+        lastHeight = newHeight;
+        
+        width = newWidth;
+        height = newHeight;
+        // Dynamically scale the size of the attractor based on window bounds
+        scale = Math.min(width, height) / 22;
 
-        // Initialize waves configuration
-        const waves: Wave[] = [
-          {
-            baseY: 0.35,
-            amplitude: 25,
-            frequency: 0.002,
-            speed: 0.0006,
-            phase: 0,
-            colorOpacity: 0.06,
-            lineWidth: 2
-          },
-          {
-            baseY: 0.5,
-            amplitude: 35,
-            frequency: 0.0015,
-            speed: -0.0004,
-            phase: Math.PI / 4,
-            colorOpacity: 0.04,
-            lineWidth: 1.5
-          },
-          {
-            baseY: 0.65,
-            amplitude: 20,
-            frequency: 0.003,
-            speed: 0.0008,
-            phase: Math.PI / 2,
-            colorOpacity: 0.05,
-            lineWidth: 1
-          }
-        ];
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.scale(dpr, dpr);
+      }
 
-        // Track scroll position & velocity
-        let lastScrollY = window.scrollY;
-        let scrollVelocity = 0;
-        let targetVelocity = 0;
-        let lastScrollTime = performance.now();
+      resize();
 
-        window.addEventListener('scroll', () => {
-          const currentScrollY = window.scrollY;
-          const currentTime = performance.now();
-          const dt = Math.max(currentTime - lastScrollTime, 1);
-          
+      let resizeTimeout = 0;
+      function handleResize() {
+        if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
+        resizeTimeout = requestAnimationFrame(resize);
+      }
+      window.addEventListener('resize', handleResize);
+
+      // Initialize particles swarm
+      const particles: Particle[] = [];
+      for (let i = 0; i < PARTICLES_COUNT; i++) {
+        // Distribute starting coordinates with a very tiny spread around the attractor path
+        particles.push({
+          x: (Math.random() - 0.5) * 10,
+          y: (Math.random() - 0.5) * 10,
+          z: (Math.random() - 0.5) * 10,
+          history: []
+        });
+      }
+
+      // Track scroll position & velocity
+      let lastScrollY = window.scrollY;
+      let scrollVelocity = 0;
+      let targetVelocity = 0;
+      let lastScrollTime = performance.now();
+
+      function scrollHandler() {
+        const currentScrollY = window.scrollY;
+        const currentTime = performance.now();
+        const timeDiff = currentTime - lastScrollTime;
+        
+        if (timeDiff > 100) {
+          // Restart velocity calculation on new gesture
+          targetVelocity = 0;
+        } else {
+          const dt = Math.max(timeDiff, 1);
           const deltaY = Math.abs(currentScrollY - lastScrollY);
           targetVelocity = deltaY / dt; // pixels per ms
+        }
+        
+        lastScrollY = currentScrollY;
+        lastScrollTime = currentTime;
+      }
+
+      window.addEventListener('scroll', scrollHandler, { passive: true });
+
+      // Cache theme color
+      let accentColor = DEFAULT_ACCENT_COLOR;
+      function updateAccentColor() {
+        const styles = getComputedStyle(document.documentElement);
+        accentColor = styles.getPropertyValue('--accent').trim() || DEFAULT_ACCENT_COLOR;
+      }
+      updateAccentColor();
+
+      const themeObserver = new MutationObserver(() => {
+        updateAccentColor();
+      });
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+
+      let animationFrameId = 0;
+      let lastTime = performance.now();
+      let angleY = 0;
+      let angleX = 0.5; // slight initial tilt
+
+      function loop(time: number) {
+        if (isReducedMotion || !canvas || !ctx) return;
+        animationFrameId = requestAnimationFrame(loop);
+
+        const rawDt = time - lastTime;
+        const dt = Math.min(rawDt, 100); // Clamp to avoid leaps on tab resume
+        lastTime = time;
+
+        const dtRatio = dt / 16.67;
+
+        // Frame-rate independent velocity decay
+        targetVelocity *= Math.pow(0.95, dtRatio);
+        if (targetVelocity < 0.001) targetVelocity = 0;
+
+        // Frame-rate independent velocity lerping
+        const lerpFactor = 1 - Math.pow(1 - 0.08, dtRatio);
+        scrollVelocity += (targetVelocity - scrollVelocity) * lerpFactor;
+
+        // Physics step calculation: higher velocity increases physics speed
+        // Base dt is 0.003, scroll swells it up to ~0.02
+        const simDt = 0.0035 + scrollVelocity * 0.04;
+
+        // Slow camera rotation + scroll mapping
+        angleY += 0.001 * dtRatio + scrollVelocity * 0.05;
+        // Shift camera X tilt slightly with scroll velocity
+        angleX = 0.5 + Math.sin(time * 0.0002) * 0.1;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, width, height);
+
+        // Precompute rotation sines/cosines
+        const cosY = Math.cos(angleY);
+        const sinY = Math.sin(angleY);
+        const cosX = Math.cos(angleX);
+        const sinX = Math.sin(angleX);
+
+        ctx.fillStyle = accentColor;
+
+        particles.forEach((p) => {
+          // 1. Update attractor physics (Halvorsen differential equations)
+          const dx = -ATTR_A * p.x - 4 * p.y - 4 * p.z - p.y * p.y;
+          const dy = -ATTR_A * p.y - 4 * p.z - 4 * p.x - p.z * p.z;
+          const dz = -ATTR_A * p.z - 4 * p.x - 4 * p.y - p.x * p.x;
+
+          p.x += dx * simDt;
+          p.y += dy * simDt;
+          p.z += dz * simDt;
+
+          // Stability Guard: if values drift to NaN or exceed bounds, reset to core
+          const distSq = p.x * p.x + p.y * p.y + p.z * p.z;
+          if (isNaN(distSq) || distSq > 350) {
+            p.x = (Math.random() - 0.5) * 5;
+            p.y = (Math.random() - 0.5) * 5;
+            p.z = (Math.random() - 0.5) * 5;
+            p.history = [];
+            return;
+          }
+
+          // 2. Rotate in 3D
+          // Rotate Y (Yaw)
+          const x1 = p.x * cosY - p.z * sinY;
+          const z1 = p.x * sinY + p.z * cosY;
+          // Rotate X (Pitch)
+          const y2 = p.y * cosX - z1 * sinX;
+          const z2 = p.y * sinX + z1 * cosX;
+
+          // 3. Project to 2D
+          const fov = 28;
+          const perspective = fov / (fov + z2);
           
-          lastScrollY = currentScrollY;
-          lastScrollTime = currentTime;
-        }, { passive: true });
+          // Draw coordinates centered in viewport
+          const screenX = x1 * perspective * scale + width / 2;
+          const screenY = y2 * perspective * scale + height / 2;
 
-        let animationFrameId: number;
-        let lastTime = performance.now();
-
-        function loop(time: number) {
-          if (isReducedMotion || !canvas || !ctx) return;
-          animationFrameId = requestAnimationFrame(loop);
-
-          const dt = time - lastTime;
-          lastTime = time;
-
-          // Fade target velocity back to 0
-          targetVelocity *= 0.95;
-          if (targetVelocity < 0.001) targetVelocity = 0;
-
-          // Smoothly interpolate scroll velocity (lerp)
-          scrollVelocity += (targetVelocity - scrollVelocity) * 0.08;
-
-          // Clear background
-          ctx.clearRect(0, 0, width, height);
-
-          // Get theme accent color dynamically from CSS custom properties
-          const styles = getComputedStyle(document.documentElement);
-          const accentColorRaw = styles.getPropertyValue('--accent').trim();
-          const accentColor = accentColorRaw || '#7b93d8';
+          // Determine scale and opacity based on z-depth
+          // Range of z2 is roughly [-12, 12]. Scale size and alpha accordingly.
+          const size = Math.max((fov / (fov + z2)) * 1.5, 0.4);
           
-          waves.forEach((wave) => {
-            // High velocity swells the speed and amplitude
-            const dynamicSpeed = wave.speed * (1 + scrollVelocity * 6);
-            wave.phase += dynamicSpeed * dt;
-            
-            const dynamicAmplitude = wave.amplitude * (1 + scrollVelocity * 1.2);
+          // Front particles are opaque (~0.12), back are very faint (~0.02)
+          const zAlpha = (z2 + 15) / 30; // normalized 0 to 1
+          const alpha = Math.max(Math.min(zAlpha, 1), 0) * 0.12;
 
+          // 4. Render Trails
+          // Draw history points (oldest first, with lower alpha/size)
+          p.history.forEach((hist, index) => {
+            const ratio = (index + 1) / (p.history.length + 1);
             ctx.beginPath();
-            ctx.lineWidth = wave.lineWidth;
-            ctx.strokeStyle = accentColor;
-            ctx.globalAlpha = wave.colorOpacity;
-
-            // Draw the wave path
-            for (let x = 0; x <= width; x += 4) {
-              // Multi-frequency wave calculation (sum of sines)
-              const y = height * wave.baseY + 
-                        dynamicAmplitude * Math.sin(x * wave.frequency + wave.phase) + 
-                        (dynamicAmplitude * 0.3) * Math.cos(x * (wave.frequency * 2.5) - wave.phase * 0.7);
-
-              if (x === 0) {
-                ctx.moveTo(x, y);
-              } else {
-                ctx.lineTo(x, y);
-              }
-            }
-            ctx.stroke();
+            ctx.globalAlpha = hist.alpha * ratio;
+            ctx.arc(hist.x, hist.y, hist.size * ratio, 0, Math.PI * 2);
+            ctx.fill();
           });
 
-          ctx.globalAlpha = 1.0; // Reset
-        }
+          // Draw active particle
+          ctx.beginPath();
+          ctx.globalAlpha = alpha;
+          ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
+          ctx.fill();
 
-        // Listener for changes in reduced motion preferences
-        mediaQuery.addEventListener('change', (e) => {
-          isReducedMotion = e.matches;
-          if (isReducedMotion) {
-            cancelAnimationFrame(animationFrameId);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-          } else {
-            lastTime = performance.now();
-            loop(lastTime);
+          // Update trailing history
+          p.history.push({ x: screenX, y: screenY, size, alpha });
+          if (p.history.length > 5) {
+            p.history.shift();
           }
         });
 
-        // Start the animation loop
-        if (!isReducedMotion) {
-          loop(performance.now());
-        }
+        ctx.globalAlpha = 1.0; // Reset
       }
+
+      mediaQuery.addEventListener('change', (e) => {
+        isReducedMotion = e.matches;
+        if (isReducedMotion) {
+          cancelAnimationFrame(animationFrameId);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          lastTime = performance.now();
+          loop(lastTime);
+        }
+      });
+
+      if (!isReducedMotion) {
+        loop(performance.now());
+      }
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', scrollHandler);
+        themeObserver.disconnect();
+        cancelAnimationFrame(animationFrameId);
+        if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
+      };
     }
-  </script>
+  }
+
+  let cleanup: (() => void) | undefined;
+  let isInitialPageLoad = true;
+
+  document.addEventListener('astro:page-load', () => {
+    if (isInitialPageLoad) {
+      isInitialPageLoad = false;
+      if (cleanup) return; // Prevent double init on DOMContentLoaded
+    }
+    if (cleanup) cleanup();
+    cleanup = initBackgroundAnimation();
+  });
+
+  // Fallback for non-transition setups
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    if (!cleanup) cleanup = initBackgroundAnimation();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!cleanup) cleanup = initBackgroundAnimation();
+    });
+  }
+</script>
   ```
 
-- [x] **Step 2: Verify component TypeScript compile**
+- [ ] **Step 2: Verify component TypeScript compile**
   Run: `npx astro check`
   Expected: No syntax or type errors in `BackgroundAnimation.astro`.
 
-- [x] **Step 3: Commit component**
+- [ ] **Step 3: Commit component**
   Run:
   ```bash
   rtk git add src/components/BackgroundAnimation.astro
-  rtk git commit -m "feat: add BackgroundAnimation canvas component"
+  rtk git commit -m "feat: implement Halvorsen Attractor strange attractor background swarm"
   ```
 
 ---
 
-### Task 2: Integrate BackgroundAnimation in Layout
+### Task 2: Visual & Accessibility Verification
 
-**Files:**
-- Modify: `src/layouts/Layout.astro`
-
-- [x] **Step 1: Import and inject the BackgroundAnimation component**
-  We will modify `src/layouts/Layout.astro` to import `BackgroundAnimation.astro` and place it right inside the body tag.
-
-  Modify `src/layouts/Layout.astro` as follows:
-  ```diff
-  ---
-  import '../styles/globals.css';
-  import Scrollbar from '../components/Scrollbar.astro';
-+ import BackgroundAnimation from '../components/BackgroundAnimation.astro';
-  
-  interface Props {
-    title?: string;
-    description?: string;
-  }
-  
-  const { 
-    title = "James Victor Alvarez", 
-    description = "Computer Science student at Concordia University — portfolio and projects." 
-  } = Astro.props;
-  ---
-  
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      ...
-    </head>
-    <body class="relative bg-[var(--bg-main)] text-[var(--text-main)] overflow-x-hidden">
-+     <BackgroundAnimation />
-      <div class="fixed inset-0 -z-10 pointer-events-none bg-dither" />
-      <slot />
-      <Scrollbar />
-    </body>
-  </html>
-  ```
-
-- [x] **Step 2: Run build to verify correct integration**
+- [ ] **Step 1: Run build to verify correct integration**
   Run: `npm run build`
   Expected: Astro build completes successfully.
 
-- [x] **Step 3: Commit layout changes**
-  Run:
-  ```bash
-  rtk git add src/layouts/Layout.astro
-  rtk git commit -m "feat: integrate BackgroundAnimation in Layout layout"
-  ```
-
----
-
-### Task 3: Visual & Accessibility Verification
-
-- [x] **Step 1: Check dynamic theme updates**
+- [ ] **Step 2: Check dynamic theme updates**
   Launch dev server: `npm run dev`
-  Verify that when you switch from dark mode to light mode (and vice versa) using the site's theme toggle, the canvas wave colors dynamically update to use the light/dark mode `--accent` value.
+  Verify that when you switch from dark mode to light mode (and vice versa) using the site's theme toggle, the canvas particle colors dynamically update to use the light/dark mode `--accent` value.
 
-- [x] **Step 2: Check scroll reactivity**
-  While running `npm run dev`, scroll down and up the page. Verify that the waves accelerate smoothly, swell slightly in height, and decelerate back to their default slow motion over ~0.5 seconds when scrolling stops.
+- [ ] **Step 3: Check scroll reactivity**
+  While running `npm run dev`, scroll down and up the page. Verify that the swarm accelerates smoothly, rotates horizontal perspective, and decelerates back to default slow motion over ~0.5 seconds when scrolling stops.
 
-- [x] **Step 3: Check responsiveness**
-  Resize the browser window and verify that the canvas expands/shrinks to cover the full width/height without pixelation or stretching.
+- [ ] **Step 4: Check responsiveness**
+  Resize the browser window and verify that the canvas expands/shrinks to cover the full width/height without pixelation or stretching. On mobile devices, verify that scrolling does not cause layout reset loops when URL bar state toggles.
 
-- [x] **Step 4: Check prefers-reduced-motion compatibility**
-  Set `isReducedMotion` mock to `true` temporarily in the script, or trigger the setting in system preferences, and verify that the animation stops drawing immediately.
+- [ ] **Step 5: Check prefers-reduced-motion compatibility**
+  Set system preferences to reduce motion, and verify that the animation stops drawing immediately.
