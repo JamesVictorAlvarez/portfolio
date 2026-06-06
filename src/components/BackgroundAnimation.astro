@@ -108,6 +108,10 @@
     let angleY = 0; // Camera rotation around Y axis
     let angleX = 0.4; // Camera tilt (X axis)
 
+    // Pre-allocate arrays of point objects to prevent GC thrashing/stutter in animation loop
+    const points: Point3D[] = Array.from({ length: POINTS_COUNT }, () => ({ x: 0, y: 0, z: 0 }));
+    const projected: Point3D[] = Array.from({ length: POINTS_COUNT }, () => ({ x: 0, y: 0, z: 0 }));
+
     function loop(time: number) {
       if (isReducedMotion || !canvas || !ctx) return;
       animationFrameId = requestAnimationFrame(loop);
@@ -146,16 +150,16 @@
       const speedMultiplier = 1 + scrollVelocity * 0.8;
       const tOffset = time * 0.0008 * speedMultiplier;
 
-      const points: Point3D[] = [];
       for (let i = 0; i < POINTS_COUNT; i++) {
-        const x = (7 * Math.sin(0.025 * i + tOffset) + 3 * Math.cos(0.05 * i)) * ampMultiplier;
-        const y = (4 * Math.cos(0.03 * i + tOffset * 0.8)) * ampMultiplier;
-        const z = (6 * Math.sin(0.02 * i)) * ampMultiplier;
-        points.push({ x, y, z });
+        const p = points[i];
+        p.x = (7 * Math.sin(0.025 * i + tOffset) + 3 * Math.cos(0.05 * i)) * ampMultiplier;
+        p.y = (4 * Math.cos(0.03 * i + tOffset * 0.8)) * ampMultiplier;
+        p.z = (6 * Math.sin(0.02 * i)) * ampMultiplier;
       }
 
       // 2. Rotate and project ribbon points
-      const projected = points.map((p) => {
+      for (let i = 0; i < POINTS_COUNT; i++) {
+        const p = points[i];
         // Rotate Y
         const x1 = p.x * cosY - p.z * sinY;
         const z1 = p.x * sinY + p.z * cosY;
@@ -166,11 +170,12 @@
         // Project
         const fov = 24;
         const perspective = fov / Math.max(fov + z2, 0.1);
-        const screenX = x1 * perspective * scale + width / 2;
-        const screenY = y2 * perspective * scale + height / 2;
-
-        return { x: screenX, y: screenY, z: z2 };
-      });
+        
+        const proj = projected[i];
+        proj.x = x1 * perspective * scale + width / 2;
+        proj.y = y2 * perspective * scale + height / 2;
+        proj.z = z2;
+      }
 
       // 3. Render ribbon segment-by-segment with depth-based stroke styles
       for (let i = 0; i < POINTS_COUNT - 1; i++) {
