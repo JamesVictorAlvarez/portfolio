@@ -16,189 +16,208 @@
     lineWidth: number; // thickness in pixels
   }
 
-  const canvas = document.getElementById('bg-animation') as HTMLCanvasElement | null;
-  if (canvas) {
+  let cleanup: (() => void) | undefined;
+
+  function initBackgroundAnimation() {
+    const canvas = document.getElementById('bg-animation') as HTMLCanvasElement | null;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    if (ctx) {
-      // Track prefers-reduced-motion
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      let isReducedMotion = mediaQuery.matches;
+    if (!ctx) return;
 
-      // Track window dimensions with devicePixelRatio
-      let width = 0;
-      let height = 0;
-      
-      function resize() {
-        if (!canvas || !ctx) return;
-        const dpr = window.devicePixelRatio || 1;
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        ctx.scale(dpr, dpr);
-      }
-      
-      resize();
-      window.addEventListener('resize', resize);
+    // Track prefers-reduced-motion
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let isReducedMotion = mediaQuery.matches;
 
-      // Initialize waves configuration
-      const waves: Wave[] = [
-        {
-          baseY: 0.35,
-          amplitude: 25,
-          frequency: 0.002,
-          speed: 0.0006,
-          phase: 0,
-          colorOpacity: 0.06,
-          lineWidth: 2
-        },
-        {
-          baseY: 0.5,
-          amplitude: 35,
-          frequency: 0.0015,
-          speed: -0.0004,
-          phase: Math.PI / 4,
-          colorOpacity: 0.04,
-          lineWidth: 1.5
-        },
-        {
-          baseY: 0.65,
-          amplitude: 20,
-          frequency: 0.003,
-          speed: 0.0008,
-          phase: Math.PI / 2,
-          colorOpacity: 0.05,
-          lineWidth: 1
-        }
-      ];
-
-      // Track scroll position & velocity
-      let lastScrollY = window.scrollY;
-      let scrollVelocity = 0;
-      let targetVelocity = 0;
-      let lastScrollTime = performance.now();
-
-      function scrollHandler() {
-        const currentScrollY = window.scrollY;
-        const currentTime = performance.now();
-        const timeDiff = currentTime - lastScrollTime;
-        
-        if (timeDiff > 100) {
-          // Treat as a new scroll gesture to avoid diluting the velocity with the idle time
-          targetVelocity = 0;
-        } else {
-          const dt = Math.max(timeDiff, 1);
-          const deltaY = Math.abs(currentScrollY - lastScrollY);
-          targetVelocity = deltaY / dt; // pixels per ms
-        }
-        
-        lastScrollY = currentScrollY;
-        lastScrollTime = currentTime;
-      }
-
-      window.addEventListener('scroll', scrollHandler, { passive: true });
-
-      // Cache theme accent color dynamically to avoid layout thrashing in the animation loop
-      let accentColor = DEFAULT_ACCENT_COLOR;
-      function updateAccentColor() {
-        const styles = getComputedStyle(document.documentElement);
-        const accentColorRaw = styles.getPropertyValue('--accent').trim();
-        accentColor = accentColorRaw || DEFAULT_ACCENT_COLOR;
-      }
-      
-      updateAccentColor();
-
-      const themeObserver = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            updateAccentColor();
-            break;
-          }
-        }
-      });
-      themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class']
-      });
-
-      let animationFrameId = 0;
-      let lastTime = performance.now();
-
-      function loop(time: number) {
-        if (isReducedMotion || !canvas || !ctx) return;
-        animationFrameId = requestAnimationFrame(loop);
-
-        const dt = Math.min(time - lastTime, 100);
-        lastTime = time;
-
-        const dtRatio = dt / 16.67;
-
-        // Fade target velocity back to 0
-        targetVelocity *= Math.pow(0.95, dtRatio);
-        if (targetVelocity < 0.001) targetVelocity = 0;
-
-        // Smoothly interpolate scroll velocity (lerp)
-        const lerpFactor = 1 - Math.pow(1 - 0.08, dtRatio);
-        scrollVelocity += (targetVelocity - scrollVelocity) * lerpFactor;
-
-        // Clear background
-        ctx.clearRect(0, 0, width, height);
-        
-        waves.forEach((wave) => {
-          // High velocity swells the speed and amplitude
-          const dynamicSpeed = wave.speed * (1 + scrollVelocity * 6);
-          wave.phase += dynamicSpeed * dt;
-          
-          const dynamicAmplitude = wave.amplitude * (1 + scrollVelocity * 1.2);
-
-          ctx.beginPath();
-          ctx.lineWidth = wave.lineWidth;
-          ctx.strokeStyle = accentColor;
-          ctx.globalAlpha = wave.colorOpacity;
-
-          // Draw the wave path
-          for (let x = 0; x <= width; x += 4) {
-            // Multi-frequency wave calculation (sum of sines)
-            const y = height * wave.baseY + 
-                      dynamicAmplitude * Math.sin(x * wave.frequency + wave.phase) + 
-                      (dynamicAmplitude * 0.3) * Math.cos(x * (wave.frequency * 2.5) - wave.phase * 0.7);
-
-            if (x === 0) {
-              ctx.moveTo(x, y);
-            } else {
-              ctx.lineTo(x, y);
-            }
-          }
-          ctx.stroke();
-        });
-
-        ctx.globalAlpha = 1.0; // Reset
-      }
-
-      // Listener for changes in reduced motion preferences
-      mediaQuery.addEventListener('change', (e) => {
-        isReducedMotion = e.matches;
-        if (isReducedMotion) {
-          cancelAnimationFrame(animationFrameId);
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        } else {
-          lastTime = performance.now();
-          loop(lastTime);
-        }
-      });
-
-      // Start the animation loop
-      if (!isReducedMotion) {
-        loop(performance.now());
-      }
-
-      // Cleanup event listeners and observers for Astro View Transitions
-      document.addEventListener('astro:before-swap', () => {
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('scroll', scrollHandler);
-        themeObserver.disconnect();
-        cancelAnimationFrame(animationFrameId);
-      });
+    // Track window dimensions with devicePixelRatio
+    let width = 0;
+    let height = 0;
+    
+    function resize() {
+      if (!canvas || !ctx) return;
+      const dpr = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
     }
+    
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Initialize waves configuration
+    const waves: Wave[] = [
+      {
+        baseY: 0.35,
+        amplitude: 25,
+        frequency: 0.002,
+        speed: 0.0006,
+        phase: 0,
+        colorOpacity: 0.06,
+        lineWidth: 2
+      },
+      {
+        baseY: 0.5,
+        amplitude: 35,
+        frequency: 0.0015,
+        speed: -0.0004,
+        phase: Math.PI / 4,
+        colorOpacity: 0.04,
+        lineWidth: 1.5
+      },
+      {
+        baseY: 0.65,
+        amplitude: 20,
+        frequency: 0.003,
+        speed: 0.0008,
+        phase: Math.PI / 2,
+        colorOpacity: 0.05,
+        lineWidth: 1
+      }
+    ];
+
+    // Track scroll position & velocity
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
+    let targetVelocity = 0;
+    let lastScrollTime = performance.now();
+
+    function scrollHandler() {
+      const currentScrollY = window.scrollY;
+      const currentTime = performance.now();
+      const timeDiff = currentTime - lastScrollTime;
+      
+      if (timeDiff > 100) {
+        // Treat as a new scroll gesture to avoid diluting the velocity with the idle time
+        targetVelocity = 0;
+      } else {
+        const dt = Math.max(timeDiff, 1);
+        const deltaY = Math.abs(currentScrollY - lastScrollY);
+        targetVelocity = deltaY / dt; // pixels per ms
+      }
+      
+      lastScrollY = currentScrollY;
+      lastScrollTime = currentTime;
+    }
+
+    window.addEventListener('scroll', scrollHandler, { passive: true });
+
+    // Cache theme accent color dynamically to avoid layout thrashing in the animation loop
+    let accentColor = DEFAULT_ACCENT_COLOR;
+    function updateAccentColor() {
+      const styles = getComputedStyle(document.documentElement);
+      const accentColorRaw = styles.getPropertyValue('--accent').trim();
+      accentColor = accentColorRaw || DEFAULT_ACCENT_COLOR;
+    }
+    
+    updateAccentColor();
+
+    const themeObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          updateAccentColor();
+          break;
+        }
+      }
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    let animationFrameId = 0;
+    let lastTime = performance.now();
+
+    function loop(time: number) {
+      if (isReducedMotion || !canvas || !ctx) return;
+      animationFrameId = requestAnimationFrame(loop);
+
+      const dt = Math.min(time - lastTime, 100);
+      lastTime = time;
+
+      const dtRatio = dt / 16.67;
+
+      // Fade target velocity back to 0
+      targetVelocity *= Math.pow(0.95, dtRatio);
+      if (targetVelocity < 0.001) targetVelocity = 0;
+
+      // Smoothly interpolate scroll velocity (lerp)
+      const lerpFactor = 1 - Math.pow(1 - 0.08, dtRatio);
+      scrollVelocity += (targetVelocity - scrollVelocity) * lerpFactor;
+
+      // Clear background
+      ctx.clearRect(0, 0, width, height);
+      
+      waves.forEach((wave) => {
+        // High velocity swells the speed and amplitude
+        const dynamicSpeed = wave.speed * (1 + scrollVelocity * 6);
+        wave.phase += dynamicSpeed * dt;
+        
+        const dynamicAmplitude = wave.amplitude * (1 + scrollVelocity * 1.2);
+
+        ctx.beginPath();
+        ctx.lineWidth = wave.lineWidth;
+        ctx.strokeStyle = accentColor;
+        ctx.globalAlpha = wave.colorOpacity;
+
+        // Draw the wave path
+        for (let x = 0; x <= width; x += 4) {
+          // Multi-frequency wave calculation (sum of sines)
+          const y = height * wave.baseY + 
+                    dynamicAmplitude * Math.sin(x * wave.frequency + wave.phase) + 
+                    (dynamicAmplitude * 0.3) * Math.cos(x * (wave.frequency * 2.5) - wave.phase * 0.7);
+
+          if (x === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+      });
+
+      ctx.globalAlpha = 1.0; // Reset
+    }
+
+    // Listener for changes in reduced motion preferences
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      isReducedMotion = e.matches;
+      if (isReducedMotion) {
+        cancelAnimationFrame(animationFrameId);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      } else {
+        lastTime = performance.now();
+        loop(lastTime);
+      }
+    };
+    mediaQuery.addEventListener('change', handleMotionChange);
+
+    // Start the animation loop
+    if (!isReducedMotion) {
+      loop(performance.now());
+    }
+
+    // Return cleanup function
+    return () => {
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('scroll', scrollHandler);
+      mediaQuery.removeEventListener('change', handleMotionChange);
+      themeObserver.disconnect();
+      cancelAnimationFrame(animationFrameId);
+    };
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    if (cleanup) cleanup();
+    cleanup = initBackgroundAnimation();
+  });
+
+  // Fallback for initial load if View Transitions are not active
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    if (!cleanup) cleanup = initBackgroundAnimation();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!cleanup) cleanup = initBackgroundAnimation();
+    });
   }
 </script>
