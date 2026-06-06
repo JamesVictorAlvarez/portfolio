@@ -79,16 +79,45 @@
       window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
         const currentTime = performance.now();
-        const dt = Math.max(currentTime - lastScrollTime, 1);
+        const timeDiff = currentTime - lastScrollTime;
         
-        const deltaY = Math.abs(currentScrollY - lastScrollY);
-        targetVelocity = deltaY / dt; // pixels per ms
+        if (timeDiff > 100) {
+          // Treat as a new scroll gesture to avoid diluting the velocity with the idle time
+          targetVelocity = 0;
+        } else {
+          const dt = Math.max(timeDiff, 1);
+          const deltaY = Math.abs(currentScrollY - lastScrollY);
+          targetVelocity = deltaY / dt; // pixels per ms
+        }
         
         lastScrollY = currentScrollY;
         lastScrollTime = currentTime;
       }, { passive: true });
 
-      let animationFrameId: number;
+      // Cache theme accent color dynamically to avoid layout thrashing in the animation loop
+      let accentColor = '#7b93d8';
+      function updateAccentColor() {
+        const styles = getComputedStyle(document.documentElement);
+        const accentColorRaw = styles.getPropertyValue('--accent').trim();
+        accentColor = accentColorRaw || '#7b93d8';
+      }
+      
+      updateAccentColor();
+
+      const themeObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            updateAccentColor();
+            break;
+          }
+        }
+      });
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+
+      let animationFrameId = 0;
       let lastTime = performance.now();
 
       function loop(time: number) {
@@ -107,11 +136,6 @@
 
         // Clear background
         ctx.clearRect(0, 0, width, height);
-
-        // Get theme accent color dynamically from CSS custom properties
-        const styles = getComputedStyle(document.documentElement);
-        const accentColorRaw = styles.getPropertyValue('--accent').trim();
-        const accentColor = accentColorRaw || '#7b93d8';
         
         waves.forEach((wave) => {
           // High velocity swells the speed and amplitude
