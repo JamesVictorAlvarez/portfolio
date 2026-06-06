@@ -1,27 +1,26 @@
 ---
-// BackgroundAnimation.astro - Subtle floating silk ribbons
+// BackgroundAnimation.astro - Subtle floating 3D strange attractor swarm
 ---
 <canvas id="bg-animation" class="fixed inset-0 -z-20 pointer-events-none w-full h-full block" aria-hidden="true"></canvas>
 
 <script>
-  const DEFAULT_ACCENT_COLOR = '#7b93d8';
-
-  interface Wave {
-    baseY: number; // base Y position as fraction of viewport height
-    amplitude: number; // base amplitude in pixels
-    frequency: number; // spatial wavelength frequency
-    speed: number; // idle phase change speed
-    phase: number; // current phase offset
-    colorOpacity: number; // lines alpha opacity
-    lineWidth: number; // thickness in pixels
+  // Setup requestAnimationFrame loop for Halvorsen Attractor particle swarm
+  interface Particle {
+    x: number;
+    y: number;
+    z: number;
+    // History array for drawing tails: stores 5 past projected screen coordinates
+    history: { x: number; y: number; size: number; alpha: number }[];
   }
 
-  let cleanup: (() => void) | undefined;
-  let isInitialPageLoad = true;
+  const DEFAULT_ACCENT_COLOR = '#7b93d8';
+  const PARTICLES_COUNT = 800;
+  const ATTR_A = 1.4; // Halvorsen constant parameter
 
   function initBackgroundAnimation() {
     const canvas = document.getElementById('bg-animation') as HTMLCanvasElement | null;
     if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -32,56 +31,52 @@
     // Track window dimensions with devicePixelRatio
     let width = 0;
     let height = 0;
-    let resizeTimeout = 0;
-    
+    let scale = 0;
+    let lastWidth = window.innerWidth;
+    let lastHeight = window.innerHeight;
+
     function resize() {
       if (!canvas || !ctx) return;
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      
+      // Prevent layout shifts on mobile scroll (due to url bar popping up)
+      if (newWidth === lastWidth && Math.abs(newHeight - lastHeight) < 80) return;
+      
+      lastWidth = newWidth;
+      lastHeight = newHeight;
+      
+      width = newWidth;
+      height = newHeight;
+      // Dynamically scale the size of the attractor based on window bounds
+      scale = Math.min(width, height) / 22;
+
       const dpr = window.devicePixelRatio || 1;
-      width = window.innerWidth;
-      height = window.innerHeight;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.scale(dpr, dpr);
     }
-    
+
+    resize();
+
+    let resizeTimeout = 0;
     function handleResize() {
       if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
       resizeTimeout = requestAnimationFrame(resize);
     }
-    
-    resize();
     window.addEventListener('resize', handleResize);
 
-    // Initialize waves configuration
-    const waves: Wave[] = [
-      {
-        baseY: 0.35,
-        amplitude: 25,
-        frequency: 0.002,
-        speed: 0.0006,
-        phase: 0,
-        colorOpacity: 0.06,
-        lineWidth: 2
-      },
-      {
-        baseY: 0.5,
-        amplitude: 35,
-        frequency: 0.0015,
-        speed: -0.0004,
-        phase: Math.PI / 4,
-        colorOpacity: 0.04,
-        lineWidth: 1.5
-      },
-      {
-        baseY: 0.65,
-        amplitude: 20,
-        frequency: 0.003,
-        speed: 0.0008,
-        phase: Math.PI / 2,
-        colorOpacity: 0.05,
-        lineWidth: 1
-      }
-    ];
+    // Initialize particles swarm
+    const particles: Particle[] = [];
+    for (let i = 0; i < PARTICLES_COUNT; i++) {
+      // Distribute starting coordinates with a very tiny spread around the attractor path
+      particles.push({
+        x: (Math.random() - 0.5) * 10,
+        y: (Math.random() - 0.5) * 10,
+        z: (Math.random() - 0.5) * 10,
+        history: []
+      });
+    }
 
     // Track scroll position & velocity
     let lastScrollY = window.scrollY;
@@ -95,7 +90,7 @@
       const timeDiff = currentTime - lastScrollTime;
       
       if (timeDiff > 100) {
-        // Treat as a new scroll gesture to avoid diluting the velocity with the idle time
+        // Restart velocity calculation on new gesture
         targetVelocity = 0;
       } else {
         const dt = Math.max(timeDiff, 1);
@@ -109,23 +104,16 @@
 
     window.addEventListener('scroll', scrollHandler, { passive: true });
 
-    // Cache theme accent color dynamically to avoid layout thrashing in the animation loop
+    // Cache theme color
     let accentColor = DEFAULT_ACCENT_COLOR;
     function updateAccentColor() {
       const styles = getComputedStyle(document.documentElement);
-      const accentColorRaw = styles.getPropertyValue('--accent').trim();
-      accentColor = accentColorRaw || DEFAULT_ACCENT_COLOR;
+      accentColor = styles.getPropertyValue('--accent').trim() || DEFAULT_ACCENT_COLOR;
     }
-    
     updateAccentColor();
 
-    const themeObserver = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          updateAccentColor();
-          break;
-        }
-      }
+    const themeObserver = new MutationObserver(() => {
+      updateAccentColor();
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,
@@ -134,60 +122,118 @@
 
     let animationFrameId = 0;
     let lastTime = performance.now();
+    let angleY = 0;
+    let angleX = 0.5; // slight initial tilt
 
     function loop(time: number) {
       if (isReducedMotion || !canvas || !ctx) return;
       animationFrameId = requestAnimationFrame(loop);
 
-      const dt = Math.min(time - lastTime, 100);
+      const rawDt = time - lastTime;
+      const dt = Math.min(rawDt, 100); // Clamp to avoid leaps on tab resume
       lastTime = time;
 
       const dtRatio = dt / 16.67;
 
-      // Fade target velocity back to 0
+      // Frame-rate independent velocity decay
       targetVelocity *= Math.pow(0.95, dtRatio);
       if (targetVelocity < 0.001) targetVelocity = 0;
 
-      // Smoothly interpolate scroll velocity (lerp)
+      // Frame-rate independent velocity lerping
       const lerpFactor = 1 - Math.pow(1 - 0.08, dtRatio);
       scrollVelocity += (targetVelocity - scrollVelocity) * lerpFactor;
 
-      // Clear background
+      // Physics step calculation: higher velocity increases physics speed
+      // Base dt is 0.0035, scroll swells it up to ~0.04
+      const simDt = 0.0035 + scrollVelocity * 0.04;
+
+      // Slow camera rotation + scroll mapping
+      angleY += 0.001 * dtRatio + scrollVelocity * 0.05;
+      // Shift camera X tilt slightly with scroll velocity
+      angleX = 0.5 + Math.sin(time * 0.0002) * 0.1;
+
+      // Clear canvas
       ctx.clearRect(0, 0, width, height);
-      
-      waves.forEach((wave) => {
-        // High velocity swells the speed and amplitude
-        const dynamicSpeed = wave.speed * (1 + scrollVelocity * 6);
-        wave.phase += dynamicSpeed * dt;
-        
-        const dynamicAmplitude = wave.amplitude * (1 + scrollVelocity * 1.2);
 
-        ctx.beginPath();
-        ctx.lineWidth = wave.lineWidth;
-        ctx.strokeStyle = accentColor;
-        ctx.globalAlpha = wave.colorOpacity;
+      // Precompute rotation sines/cosines
+      const cosY = Math.cos(angleY);
+      const sinY = Math.sin(angleY);
+      const cosX = Math.cos(angleX);
+      const sinX = Math.sin(angleX);
 
-        // Draw the wave path
-        for (let x = 0; x <= width; x += 4) {
-          // Multi-frequency wave calculation (sum of sines)
-          const y = height * wave.baseY + 
-                    dynamicAmplitude * Math.sin(x * wave.frequency + wave.phase) + 
-                    (dynamicAmplitude * 0.3) * Math.cos(x * (wave.frequency * 2.5) - wave.phase * 0.7);
+      ctx.fillStyle = accentColor;
 
-          if (x === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
+      particles.forEach((p) => {
+        // 1. Update attractor physics (Halvorsen differential equations)
+        const dx = -ATTR_A * p.x - 4 * p.y - 4 * p.z - p.y * p.y;
+        const dy = -ATTR_A * p.y - 4 * p.z - 4 * p.x - p.z * p.z;
+        const dz = -ATTR_A * p.z - 4 * p.x - 4 * p.y - p.x * p.x;
+
+        p.x += dx * simDt;
+        p.y += dy * simDt;
+        p.z += dz * simDt;
+
+        // Stability Guard: if values drift to NaN or exceed bounds, reset to core
+        const distSq = p.x * p.x + p.y * p.y + p.z * p.z;
+        if (isNaN(distSq) || distSq > 350) {
+          p.x = (Math.random() - 0.5) * 5;
+          p.y = (Math.random() - 0.5) * 5;
+          p.z = (Math.random() - 0.5) * 5;
+          p.history = [];
+          return;
         }
-        ctx.stroke();
+
+        // 2. Rotate in 3D
+        // Rotate Y (Yaw)
+        const x1 = p.x * cosY - p.z * sinY;
+        const z1 = p.x * sinY + p.z * cosY;
+        // Rotate X (Pitch)
+        const y2 = p.y * cosX - z1 * sinX;
+        const z2 = p.y * sinX + z1 * cosX;
+
+        // 3. Project to 2D
+        const fov = 28;
+        const perspective = fov / (fov + z2);
+        
+        // Draw coordinates centered in viewport
+        const screenX = x1 * perspective * scale + width / 2;
+        const screenY = y2 * perspective * scale + height / 2;
+
+        // Determine scale and opacity based on z-depth
+        // Range of z2 is roughly [-12, 12]. Scale size and alpha accordingly.
+        const size = Math.max((fov / (fov + z2)) * 1.5, 0.4);
+        
+        // Front particles are opaque (~0.12), back are very faint (~0.02)
+        const zAlpha = (z2 + 15) / 30; // normalized 0 to 1
+        const alpha = Math.max(Math.min(zAlpha, 1), 0) * 0.12;
+
+        // 4. Render Trails
+        // Draw history points (oldest first, with lower alpha/size)
+        p.history.forEach((hist, index) => {
+          const ratio = (index + 1) / (p.history.length + 1);
+          ctx.beginPath();
+          ctx.globalAlpha = hist.alpha * ratio;
+          ctx.arc(hist.x, hist.y, hist.size * ratio, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Draw active particle
+        ctx.beginPath();
+        ctx.globalAlpha = alpha;
+        ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Update trailing history
+        p.history.push({ x: screenX, y: screenY, size, alpha });
+        if (p.history.length > 5) {
+          p.history.shift();
+        }
       });
 
       ctx.globalAlpha = 1.0; // Reset
     }
 
-    // Listener for changes in reduced motion preferences
-    const handleMotionChange = (e: MediaQueryListEvent) => {
+    mediaQuery.addEventListener('change', (e) => {
       isReducedMotion = e.matches;
       if (isReducedMotion) {
         cancelAnimationFrame(animationFrameId);
@@ -196,36 +242,34 @@
         lastTime = performance.now();
         loop(lastTime);
       }
-    };
-    mediaQuery.addEventListener('change', handleMotionChange);
+    });
 
-    // Start the animation loop
     if (!isReducedMotion) {
       loop(performance.now());
     }
 
-    // Return cleanup function
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', scrollHandler);
-      mediaQuery.removeEventListener('change', handleMotionChange);
       themeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
       if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
     };
   }
 
+  let cleanup: (() => void) | undefined;
+  let isInitialPageLoad = true;
+
   document.addEventListener('astro:page-load', () => {
-    if (isInitialPageLoad && cleanup) {
+    if (isInitialPageLoad) {
       isInitialPageLoad = false;
-      return;
+      if (cleanup) return; // Prevent double init on DOMContentLoaded
     }
-    isInitialPageLoad = false;
     if (cleanup) cleanup();
     cleanup = initBackgroundAnimation();
   });
 
-  // Fallback for initial load if View Transitions are not active
+  // Fallback for non-transition setups
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     if (!cleanup) cleanup = initBackgroundAnimation();
   } else {
