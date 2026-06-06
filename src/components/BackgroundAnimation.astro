@@ -124,6 +124,7 @@
 
       const lerpFactor = 1 - Math.pow(1 - 0.08, dtRatio);
       scrollVelocity += (targetVelocity - scrollVelocity) * lerpFactor;
+      scrollVelocity = Math.min(scrollVelocity, 4.0);
 
       // Camera yaw rotates slowly, accelerated by scroll position changes
       angleY += (0.0005 + scrollVelocity * 0.03) * dtRatio;
@@ -164,7 +165,7 @@
 
         // Project
         const fov = 24;
-        const perspective = fov / (fov + z2);
+        const perspective = fov / Math.max(fov + z2, 0.1);
         const screenX = x1 * perspective * scale + width / 2;
         const screenY = y2 * perspective * scale + height / 2;
 
@@ -192,7 +193,7 @@
         ctx.strokeStyle = accentColor;
         ctx.globalAlpha = alpha;
         // Line thickness scales with perspective/depth
-        ctx.lineWidth = Math.max((fov / (fov + avgZ)) * 1.5, 0.4);
+        ctx.lineWidth = Math.max((fov / Math.max(fov + avgZ, 0.1)) * 1.5, 0.4);
         ctx.stroke();
       }
 
