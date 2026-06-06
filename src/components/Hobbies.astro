@@ -9,13 +9,22 @@ const songs = [
 ---
 <section id="hobbies" class="section container-narrow flex flex-col pt-12 overflow-hidden">
   <div class="mb-10 animate-fade-in">
-    <p class="label mb-2">Downtime</p>
-    <h2 class="h2">Hobbies & Interests</h2>
+    <p class="label mb-2">
+      <span class="lang-en">Downtime</span>
+      <span class="lang-fr">Temps libre</span>
+    </p>
+    <h2 class="h2">
+      <span class="lang-en">Hobbies & Interests</span>
+      <span class="lang-fr">Loisirs & Intérêts</span>
+    </h2>
   </div>
 
   <!-- Music -->
   <div class="mb-14">
-    <p class="label mb-5">On repeat</p>
+    <p class="label mb-5">
+      <span class="lang-en">On repeat</span>
+      <span class="lang-fr">En boucle</span>
+    </p>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
       {songs.map((embed) => (
         <div class="overflow-hidden rounded-lg">
@@ -40,7 +49,8 @@ const songs = [
       type="button"
       class="group flex items-center gap-1 mb-5 label hover:text-[var(--accent)] transition-colors duration-200 cursor-pointer text-left bg-transparent border-0 p-0 font-medium uppercase tracking-wider text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
     >
-      <span>Recent Watches</span>
+      <span class="lang-en">Recent Watches</span>
+      <span class="lang-fr">Visionnements Récents</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="14"
@@ -89,13 +99,16 @@ const songs = [
       <!-- Header -->
       <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
         <h3 id="modal-title" class="text-sm font-semibold uppercase tracking-wider text-[var(--text-main)]">
-          Movie Watch History
+          <span class="lang-en">Movie Watch History</span>
+          <span class="lang-fr">Historique des Films Visionnés</span>
         </h3>
         <button
           id="modal-close"
           type="button"
           class="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--border)] transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           aria-label="Close modal"
+          data-aria-label-en="Close modal"
+          data-aria-label-fr="Fermer la boîte de dialogue"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
@@ -143,9 +156,25 @@ const songs = [
 
     let movies: Movie[] = [];
 
-    // Helper function to build movie card HTML
-    function renderMovieCard(m: Movie, showDate = false) {
+    const monthMap: Record<string, string> = {
+      "Jan": "janv.", "Feb": "févr.", "Mar": "mars", "Apr": "avr.",
+      "May": "mai", "Jun": "juin", "Jul": "juil.", "Aug": "août",
+      "Sep": "sept.", "Oct": "oct.", "Nov": "nov.", "Dec": "déc."
+    };
+
+    function formatWatchDate(dateStr: string | undefined, lang: string) {
+      if (!dateStr) return "";
+      if (lang !== "fr") return dateStr;
+      let formatted = dateStr;
+      Object.keys(monthMap).forEach(m => {
+        formatted = formatted.replace(m, monthMap[m]);
+      });
+      return "Visionné le " + formatted;
+    }
+
+    function renderMovieCard(m: Movie, showDate = false, lang = "en") {
       const safeTitle = m.title.replace(/"/g, '&quot;');
+      const displayDate = showDate && m.watchedDate ? formatWatchDate(m.watchedDate, lang) : "";
       return `
         <a
           href="${m.link}"
@@ -167,11 +196,37 @@ const songs = [
             </span>
             <div class="flex flex-col gap-0.5">
               ${m.rating ? `<span class="text-[10px] text-[var(--accent-warn)]">${m.rating}</span>` : ''}
-              ${showDate && m.watchedDate ? `<span class="text-[9px] text-[var(--text-muted)] font-normal">${m.watchedDate}</span>` : ''}
+              ${showDate && m.watchedDate ? `<span class="text-[9px] text-[var(--text-muted)] font-normal">${displayDate}</span>` : ''}
             </div>
           </div>
         </a>
       `;
+    }
+
+    function populateGrids() {
+      if (!container || !modalContainer) return;
+      const lang = document.documentElement.getAttribute("lang") || "en";
+      if (!movies || movies.length === 0) {
+        const errMsg = lang === "fr"
+          ? `<p class="text-sm text-[var(--text-muted)] col-span-full">Échec du chargement des films.</p>`
+          : `<p class="text-sm text-[var(--text-muted)] col-span-full">Failed to load movies.</p>`;
+        container.innerHTML = errMsg;
+        modalContainer.innerHTML = errMsg;
+        return;
+      }
+      // Render first 6 movies on the main page
+      container.innerHTML = movies.slice(0, 6).map((m) => renderMovieCard(m, false, lang)).join("");
+
+      // Render all movies in the modal
+      modalContainer.innerHTML = movies.map((m) => renderMovieCard(m, true, lang)).join("");
+    }
+
+    function updateAriaLabels() {
+      const lang = document.documentElement.getAttribute("lang") || "en";
+      if (closeBtn) {
+        const closeAria = closeBtn.getAttribute(`data-aria-label-${lang}`);
+        if (closeAria) closeBtn.setAttribute("aria-label", closeAria);
+      }
     }
 
     let openedWithKeyboard = false;
@@ -257,29 +312,23 @@ const songs = [
       });
     }
 
+    // Load data
     try {
       const res = await fetch("/api/movies");
       movies = await res.json();
-      
-      if (!movies || movies.length === 0) {
-        const errMsg = `<p class="text-sm text-[var(--text-muted)] col-span-full">Failed to load movies.</p>`;
-        container.innerHTML = errMsg;
-        modalContainer.innerHTML = errMsg;
-        return;
-      }
-
-      // Render first 6 movies on the main page
-      container.innerHTML = movies.slice(0, 6).map((m) => renderMovieCard(m, false)).join("");
-
-      // Render all movies in the modal
-      modalContainer.innerHTML = movies.map((m) => renderMovieCard(m, true)).join("");
-
+      populateGrids();
+      updateAriaLabels();
     } catch (err) {
       console.error(err);
-      const errMsg = `<p class="text-sm text-[var(--text-muted)] col-span-full">Failed to load movies.</p>`;
-      container.innerHTML = errMsg;
-      modalContainer.innerHTML = errMsg;
+      populateGrids();
+      updateAriaLabels();
     }
+
+    // Re-populate watches grids on language change
+    window.addEventListener("lang-change", () => {
+      populateGrids();
+      updateAriaLabels();
+    });
   }
 
   initMovies();
