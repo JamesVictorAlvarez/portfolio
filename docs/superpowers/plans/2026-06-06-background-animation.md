@@ -205,7 +205,7 @@
 **Files:**
 - Modify: `src/layouts/Layout.astro`
 
-- [ ] **Step 1: Import and inject the BackgroundAnimation component**
+- [x] **Step 1: Import and inject the BackgroundAnimation component**
   We will modify `src/layouts/Layout.astro` to import `BackgroundAnimation.astro` and place it right inside the body tag.
 
   Modify `src/layouts/Layout.astro` as follows:
@@ -240,11 +240,11 @@
   </html>
   ```
 
-- [ ] **Step 2: Run build to verify correct integration**
+- [x] **Step 2: Run build to verify correct integration**
   Run: `npm run build`
   Expected: Astro build completes successfully.
 
-- [ ] **Step 3: Commit layout changes**
+- [x] **Step 3: Commit layout changes**
   Run:
   ```bash
   rtk git add src/layouts/Layout.astro
