@@ -40,9 +40,13 @@ html.light {
   --accent-error: #b5505e;
 }
 
+html {
+  background-color: var(--bg-main);
+}
+
 body {
   @apply antialiased;
-  background-color: var(--bg-main);
+  background-color: transparent;
   color: var(--text-main);
   font-variant-numeric: tabular-nums;
 }
@@ -168,7 +172,6 @@ section[id] {
 
 /* ── Grain / dither overlay (dark mode) ── */
 .bg-dither {
-  background-color: var(--bg-main);
   background-image:
     radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0),
     radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 0);
