@@ -15,7 +15,7 @@
 **Files:**
 - Create: `src/components/BackgroundAnimation.astro`
 
-- [ ] **Step 1: Write the component markup and script**
+- [x] **Step 1: Write the component markup and script**
   Create the component with a canvas element and a script that handles high-DPI scaling, multi-frequency sine wave calculations, lerped scroll velocity tracking, theme-color detection, and reduced-motion compliance.
 
   Create `src/components/BackgroundAnimation.astro` with the following content:
@@ -187,11 +187,11 @@
   </script>
   ```
 
-- [ ] **Step 2: Verify component TypeScript compile**
+- [x] **Step 2: Verify component TypeScript compile**
   Run: `npx astro check`
   Expected: No syntax or type errors in `BackgroundAnimation.astro`.
 
-- [ ] **Step 3: Commit component**
+- [x] **Step 3: Commit component**
   Run:
   ```bash
   rtk git add src/components/BackgroundAnimation.astro
