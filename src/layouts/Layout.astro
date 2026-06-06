@@ -16,6 +16,8 @@ const {
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
     <script is:inline>
       (function() {
         let saved = "dark";
@@ -34,8 +36,23 @@ const {
         }
       })();
     </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <script is:inline>
+      (function() {
+        let savedLang = "en";
+        try {
+          const stored = localStorage.getItem("lang");
+          if (stored === "en" || stored === "fr") {
+            savedLang = stored;
+          } else {
+            const navLang = navigator.language || "en";
+            savedLang = navLang.startsWith("fr") ? "fr" : "en";
+          }
+        } catch (e) {
+          // Ignore storage errors
+        }
+        document.documentElement.setAttribute("lang", savedLang);
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

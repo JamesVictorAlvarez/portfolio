@@ -389,3 +389,12 @@ select {
     animation: none !important;
   }
 }
+
+/* ── Language Switcher Visibility ── */
+html:not([lang="en"]) .lang-en {
+  display: none !important;
+}
+html:not([lang="fr"]) .lang-fr {
+  display: none !important;
+}
+
