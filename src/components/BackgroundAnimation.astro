@@ -51,7 +51,7 @@
       // Dynamically scale the size of the attractor based on window bounds
       scale = Math.min(width, height) / 22;
 
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.scale(dpr, dpr);
@@ -145,11 +145,11 @@
 
       // Physics step calculation: higher velocity increases physics speed
       // Base dt is 0.0035, scroll swells it up to ~0.04
-      const simDt = (0.0035 + scrollVelocity * 0.04) * dtRatio;
+      const simDt = Math.min((0.0035 + scrollVelocity * 0.04) * dtRatio, 0.015);
 
       // Slow camera rotation + scroll mapping
-      angleY += 0.001 * dtRatio + scrollVelocity * 0.05;
-      // Shift camera X tilt slightly with scroll velocity
+      angleY += (0.001 + scrollVelocity * 0.05) * dtRatio;
+      // Slow camera pitch oscillation over time
       angleX = 0.5 + Math.sin(time * 0.0002) * 0.1;
 
       // Clear canvas
@@ -245,7 +245,11 @@
         loop(lastTime);
       }
     }
-    mediaQuery.addEventListener('change', handleMotionChange);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleMotionChange);
+    } else {
+      mediaQuery.addListener(handleMotionChange);
+    }
 
     if (!isReducedMotion) {
       loop(performance.now());
@@ -254,7 +258,11 @@
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', scrollHandler);
-      mediaQuery.removeEventListener('change', handleMotionChange);
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleMotionChange);
+      } else {
+        mediaQuery.removeListener(handleMotionChange);
+      }
       themeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
       if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
